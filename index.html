@@ -114,7 +114,7 @@ function roleSelect(){
     </div>
     ${[
       {id:'patient',l:'Patient',s:'Health record, emergency card & community reporting',ic:'♥',c:C.pri,lc:'#E8F5F5'},
-      {id:'responder',l:'First Responder',s:'SAMU · Red Cross Rwanda · Verified access portal',ic:'+',c:C.dan,lc:'#FEE2E2'},
+      {id:'responder',l:'First Responder',s:'EMS · Red Cross Rwanda · Verified access portal',ic:'+',c:C.dan,lc:'#FEE2E2'},
       {id:'chw',l:'Community Health Worker',s:'Field visit logging and household reporting',ic:'◉',c:C.suc,lc:'#D1FAE5'},
       {id:'provider',l:'Private Provider',s:'Add consultation records to the national system',ic:'◈',c:C.acc,lc:'#FEF3C7'},
     ].map(r=>`<div class="role-card" style="background:${r.lc};border-color:${r.c}" onclick="setState({role:'${r.id}',tab:'home',frStage:'login',reportStep:0})">
@@ -167,7 +167,7 @@ function emergencyCard(){
       </div>
     </div>
     <div class="card"><p style="font-size:12px;font-weight:600;color:#888;letter-spacing:0.5px;margin-bottom:8px">HOW RESPONDERS ACCESS THIS</p>
-      ${['QR code — scan with any camera, no app needed','Wallet card — print and carry, works without your phone','Verified portal — SAMU and Red Cross search by ID after logging in with their credentials'].map((s,i)=>`<div style="display:flex;gap:10px;margin-bottom:7px;align-items:flex-start"><span style="width:19px;height:19px;border-radius:50%;background:${C.priL||'#E8F5F5'};color:${C.pri};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0">${i+1}</span><p style="font-size:13px">${s}</p></div>`).join('')}
+      ${['QR code — scan with any camera, no app needed','Wallet card — print and carry, works without your phone','Verified portal — EMS and Red Cross search by ID after logging in with their credentials'].map((s,i)=>`<div style="display:flex;gap:10px;margin-bottom:7px;align-items:flex-start"><span style="width:19px;height:19px;border-radius:50%;background:${C.priL||'#E8F5F5'};color:${C.pri};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0">${i+1}</span><p style="font-size:13px">${s}</p></div>`).join('')}
     </div>
   </div>`;
 }
@@ -214,15 +214,15 @@ function communityReport(){
 
 function firstResponder(){
   if(state.frStage==='login')return `<div class="pad">
-    <div style="text-align:center;padding:20px 0 16px"><div style="width:56px;height:56px;border-radius:50%;background:${C.danL};margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:24px;color:${C.dan}">+</div><h3 style="font-weight:600;margin-bottom:4px">First Responder Portal</h3><p style="font-size:13px;color:#888">SAMU · Red Cross Rwanda · Verified CHWs</p></div>
+    <div style="text-align:center;padding:20px 0 16px"><div style="width:56px;height:56px;border-radius:50%;background:${C.danL};margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:24px;color:${C.dan}">+</div><h3 style="font-weight:600;margin-bottom:4px">First Responder Portal</h3><p style="font-size:13px;color:#888">EMS · Red Cross Rwanda · Verified CHWs</p></div>
     <div class="alert" style="background:${C.danL}"><p style="font-size:12px;color:${C.dan};font-weight:600">All access is logged with timestamp, location, and responder ID. For credentialled emergency responders only.</p></div>
-    <div class="field"><label class="label">RESPONDER ID</label><input class="inp" value="SAMU-RW-00412"/></div>
+    <div class="field"><label class="label">RESPONDER ID</label><input class="inp" value="EMS-RW-00412"/></div>
     <div class="field"><label class="label">PIN</label><input class="inp" type="password" value="000000"/></div>
     <button class="pri-btn" style="background:${C.dan}" onclick="setState({frStage:'search'})">Access emergency portal</button>
     <p style="text-align:center;font-size:11px;color:#aaa;margin-top:10px">Access logged with timestamp and location</p>
   </div>`;
   if(state.frStage==='search')return `<div class="pad">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:8px;height:8px;border-radius:50%;background:${C.suc};display:inline-block"></span><span style="font-size:12px;color:${C.suc};font-weight:600">Verified: Mugabo Eric — SAMU-RW-00412</span></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:8px;height:8px;border-radius:50%;background:${C.suc};display:inline-block"></span><span style="font-size:12px;color:${C.suc};font-weight:600">Verified: Mugabo Eric — EMS-RW-00412</span></div>
     <h3 style="font-weight:600;margin-bottom:4px">Find patient</h3>
     <p style="font-size:13px;color:#888;margin-bottom:14px">Search by national ID. Use QR scan when the patient's phone is accessible.</p>
     <div class="field"><label class="label">NATIONAL ID NUMBER</label><input class="inp" id="frId" placeholder="e.g. 1 1990 8 0012345 6 78"/></div>
@@ -240,7 +240,7 @@ function firstResponder(){
       </div>
     </div>
     ${[{l:'CRITICAL ALLERGIES',c:'Penicillin · Latex',u:true},{l:'CHRONIC CONDITIONS',c:'Hypertension · Type 2 Diabetes',u:false},{l:'CURRENT MEDICATIONS',c:'Metformin 500mg (twice daily)\nAmlodipine 5mg (once daily)',u:false},{l:'EMERGENCY CONTACT',c:'Jean Uwimana (Spouse)\n+250 722 654 321',u:false}].map(s=>`<div style="background:${s.u?C.danL:'#F8FAFB'};border-radius:12px;padding:14px;margin-bottom:10px;border:0.5px solid ${s.u?C.dan:'rgba(0,0,0,0.1)'}"><p style="font-size:11px;font-weight:600;color:${s.u?C.dan:'#888'};letter-spacing:0.5px;margin-bottom:4px">${s.l}</p><p style="font-size:14px;white-space:pre-line">${s.c}</p></div>`).join('')}
-    <div class="card"><p style="font-size:11px;color:#888">Access logged: 11 Apr 2026 · 14:32 · Responder: Mugabo Eric (SAMU-RW-00412) · Kigali</p></div>
+    <div class="card"><p style="font-size:11px;color:#888">Access logged: 11 Apr 2026 · 14:32 · Responder: Mugabo Eric (EMS-RW-00412) · Kigali</p></div>
   </div>`;
 }
 

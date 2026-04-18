@@ -379,10 +379,10 @@ const pt = {
 };
 
 const ROLES = [
-  { id:'patient', icon:'👤', lbl:'Patient / Citizen' },
-  { id:'fr',      icon:'🚑', lbl:'First Responder' },
-  { id:'chw',     icon:'🏘', lbl:'Community Health Worker' },
-  { id:'prov',    icon:'🏥', lbl:'Private Provider' }
+  { id:'patient',lbl:'Patient / Citizen' },
+  { id:'fr',lbl:'First Responder' },
+  { id:'chw',lbl:'Community Health Worker' },
+  { id:'prov',lbl:'Private Provider' }
 ];
 
 const CONNS = [
@@ -460,10 +460,10 @@ function setScr(html, nav) {
 
 // ── PATIENT ──
 function rPatient() {
-  const nav=['🏠 Home','👤 Profile','🔐 Consent'];
+  const nav=['Home','Profile','Consent'];
   if(S.sc===0) {
     setScr(`
-      <div class="ah"><div class="ah-t">UbuzimaCard</div><div class="ah-s">Muraho, Marie 👋</div></div>
+      <div class="ah"><div class="ah-t">UbuzimaCard</div><div class="ah-s">Muraho, Marie</div></div>
       <div class="sc">
         <div class="card" style="border-left:3px solid var(--green-mid)">
           <div class="card-title">Your emergency card</div>
@@ -567,7 +567,7 @@ function rFR() {
       </div>`, snav);
     return;
   }
-  const nav = ['🔍 Lookup','📋 Result'];
+  const nav = ['Lookup','Result'];
   const lowWarn = S.conn==='low' ? `<div class="card" style="border-left:3px solid var(--amber-border)"><span class="bw">⚠ Weak signal</span><div style="font-size:11px;color:var(--text2);margin-top:4px">Showing cached profile. Last refresh: 2h ago. Clinically current.</div></div>` : '';
   if(!S.looked || S.sc===0) {
     setScr(`
@@ -645,7 +645,7 @@ function rCHW() {
     }
     return;
   }
-  const nav=['📊 Dashboard','📝 Report','✓ Confirmed'];
+  const nav=['Dashboard','Report','Confirmed'];
   if(S.sc===0) {
     setScr(`
       <div class="ah"><div class="ah-t">CHW Dashboard</div><div class="ah-s">Gasabo District · Remera Sector</div></div>
@@ -700,7 +700,7 @@ function rCHW() {
 
 // ── PRIVATE PROVIDER ──
 function rProv() {
-  const nav=['🔍 Lookup','📋 Log Visit','✓ Submitted'];
+  const nav=['Lookup','Log Visit','Submitted'];
   if(!S.visited && S.sc<1) {
     setScr(`
       <div class="ah"><div class="ah-t">Patient Lookup</div><div class="ah-s">Consent verification required</div></div>

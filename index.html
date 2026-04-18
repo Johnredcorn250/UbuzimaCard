@@ -379,10 +379,10 @@ const pt = {
 };
 
 const ROLES = [
-  { id:'patient',lbl:'Patient / Citizen' },
-  { id:'fr',lbl:'First Responder' },
-  { id:'chw',lbl:'Community Health Worker' },
-  { id:'prov',lbl:'Private Provider' }
+  { id:'patient', lbl:'Patient / Citizen' },
+  { id:'fr', lbl:'First Responder' },
+  { id:'chw', lbl:'Community Health Worker' },
+  { id:'prov', lbl:'Private Provider' }
 ];
 
 const CONNS = [
@@ -753,7 +753,7 @@ function rProv() {
 function render() {
   document.getElementById('role-btns').innerHTML = ROLES.map(r =>
     `<button class="role-btn${S.role===r.id?' active':''}" onclick="swR('${r.id}')">
-      <span class="role-icon">${r.icon}</span>${r.lbl}
+      ${r.icon ? `<span class="role-icon">${r.icon}</span>` : ''}${r.lbl}
     </button>`).join('');
   document.getElementById('conn-btns').innerHTML = CONNS.map(c =>
     `<button class="conn-btn${S.conn===c.id?' '+c.cls:''}" onclick="swC('${c.id}')">

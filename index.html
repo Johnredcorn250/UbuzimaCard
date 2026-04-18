@@ -245,24 +245,33 @@
   }
   .tsw.on .tkn { left: 21px; }
 
-  /* USSD */
-  .ussd-screen { background: #0a0a0a; min-height: 440px; padding: 14px; }
-  .ussd-bar { background: #111; padding: 7px 14px; font-family: 'DM Mono', monospace; font-size: 10px; color: #555; }
-  .ul { color: #00e676; font-size: 12px; font-family: 'DM Mono', monospace; line-height: 2; }
-  .ui { color: #fff; font-size: 12px; font-family: 'DM Mono', monospace; line-height: 2; }
-  .um { color: #444; font-size: 10px; font-family: 'DM Mono', monospace; }
-  .ussd-btn {
-    background: #00e676; color: #0a0a0a; border: none; padding: 6px 14px;
-    border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 11px;
-    cursor: pointer; margin-top: 14px; font-weight: 500;
-  }
+  /* USSD - authentic MTN Rwanda overlay */
+  .ussd-overlay { background:#686868; min-height:540px; display:flex; flex-direction:column; }
+  .ussd-body { flex:1; display:flex; align-items:center; justify-content:center; padding:24px 20px; text-align:center; }
+  .ussd-text { color:#fff; font-size:14px; font-family:-apple-system,'Helvetica Neue',sans-serif; font-weight:400; line-height:1.9; }
+  .ussd-footer { display:flex; padding:12px 12px 16px; gap:10px; background:#686868; }
+  .ussd-dismiss { flex:1; padding:14px 0; background:#fff; color:#000; border:none; border-radius:10px; font-size:16px; font-family:-apple-system,'Helvetica Neue',sans-serif; cursor:pointer; }
+  .ussd-reply { flex:1; padding:14px 0; background:#000; color:#fff; border:none; border-radius:10px; font-size:16px; font-family:-apple-system,'Helvetica Neue',sans-serif; cursor:pointer; }
+  .ussd-input-area { background:#686868; padding:0 12px 8px; display:flex; flex-direction:column; gap:8px; }
+  .ussd-field { width:100%; padding:10px 12px; border:1px solid rgba(255,255,255,0.4); border-radius:8px; background:rgba(255,255,255,0.15); color:#fff; font-size:14px; font-family:-apple-system,'Helvetica Neue',sans-serif; outline:none; box-sizing:border-box; }
+  .ussd-field::placeholder { color:rgba(255,255,255,0.5); }
+  .ussd-kb { background:#d1d5db; border-radius:10px; padding:8px 4px 4px; display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+  .ussd-key { background:#fff; border:none; border-radius:7px; padding:9px 4px; font-size:15px; color:#000; font-family:-apple-system,'Helvetica Neue',sans-serif; cursor:pointer; text-align:center; line-height:1.2; }
+  .ussd-key .ksub { font-size:8px; color:#666; display:block; letter-spacing:0.5px; }
+  .ussd-key.kdark { background:#adb5bd; }
 
-  /* SMS */
-  .smsb {
-    background: #111; border-radius: 8px; padding: 10px 12px;
-    font-family: 'DM Mono', monospace; font-size: 11px;
-    color: #00e676; line-height: 1.9; margin-bottom: 8px;
-  }
+  /* SMS - standard iOS messages look */
+  .sms-screen { background:#fff; min-height:440px; display:flex; flex-direction:column; }
+  .sms-hdr { background:#f2f2f7; padding:10px 14px; text-align:center; border-bottom:1px solid #e0e0e0; }
+  .sms-hdr-num { font-size:13px; font-weight:600; color:#000; font-family:-apple-system,'Helvetica Neue',sans-serif; }
+  .sms-hdr-sub { font-size:11px; color:#8e8e93; font-family:-apple-system,'Helvetica Neue',sans-serif; }
+  .sms-body { flex:1; padding:12px 10px; display:flex; flex-direction:column; gap:8px; }
+  .sms-out { align-self:flex-end; background:#34c759; color:#fff; padding:8px 12px; border-radius:16px 16px 4px 16px; font-size:12px; max-width:85%; line-height:1.5; font-family:-apple-system,'Helvetica Neue',sans-serif; }
+  .sms-in { align-self:flex-start; background:#e9e9eb; color:#000; padding:8px 12px; border-radius:16px 16px 16px 4px; font-size:12px; max-width:85%; line-height:1.5; font-family:-apple-system,'Helvetica Neue',sans-serif; }
+  .sms-time { font-size:10px; color:#8e8e93; text-align:center; margin:4px 0; font-family:-apple-system,'Helvetica Neue',sans-serif; }
+  .sms-compose { border-top:1px solid #e0e0e0; padding:8px 10px; display:flex; align-items:center; gap:8px; background:#fff; }
+  .sms-cinput { flex:1; border:1px solid #e0e0e0; border-radius:18px; padding:7px 12px; font-size:12px; outline:none; font-family:-apple-system,'Helvetica Neue',sans-serif; background:#f9f9f9; }
+  .sms-send { background:#34c759; color:#fff; border:none; width:30px; height:30px; border-radius:50%; font-size:14px; cursor:pointer; flex-shrink:0; }
 
   /* success */
   .success-icon { font-size: 32px; margin-bottom: 8px; }
@@ -379,10 +388,10 @@ const pt = {
 };
 
 const ROLES = [
-  { id:'patient', lbl:'Patient / Citizen' },
-  { id:'fr', lbl:'First Responder' },
-  { id:'chw', lbl:'Community Health Worker' },
-  { id:'prov', lbl:'Private Provider' }
+  { id:'patient', icon:'👤', lbl:'Patient / Citizen' },
+  { id:'fr',      icon:'🚑', lbl:'First Responder' },
+  { id:'chw',     icon:'🏘', lbl:'Community Health Worker' },
+  { id:'prov',    icon:'🏥', lbl:'Private Provider' }
 ];
 
 const CONNS = [
@@ -460,10 +469,10 @@ function setScr(html, nav) {
 
 // ── PATIENT ──
 function rPatient() {
-  const nav=['Home','Profile','Consent'];
+  const nav=['🏠 Home','👤 Profile','🔐 Consent'];
   if(S.sc===0) {
     setScr(`
-      <div class="ah"><div class="ah-t">UbuzimaCard</div><div class="ah-s">Muraho, Marie</div></div>
+      <div class="ah"><div class="ah-t">UbuzimaCard</div><div class="ah-s">Muraho, Marie 👋</div></div>
       <div class="sc">
         <div class="card" style="border-left:3px solid var(--green-mid)">
           <div class="card-title">Your emergency card</div>
@@ -533,41 +542,71 @@ function rPatient() {
 // ── FIRST RESPONDER ──
 function rFR() {
   if(S.conn==='none') {
-    const steps = [
-      `<div class="ul">UbuzimaCard Emergency Access</div>
-       <div class="ul">──────────────────────</div>
-       <div class="ul">1. Lookup by National ID</div>
-       <div class="ul">2. Lookup by Phone Number</div>
-       <div class="ul">0. Exit</div>`,
-      `<div class="ul">Enter 16-digit National ID:</div>
-       <div class="ui">1 1985 8 0000000 4 12<span style="animation:blink 1s infinite">_</span></div>`,
-      `<div class="ul">── EMERGENCY PROFILE ──────</div>
-       <div class="ul">UWIMANA Marie — F — 12/08/1985</div>
-       <div class="ul">Blood: B+</div>
-       <div class="ul" style="color:#ff5252">⚠ ALLERGY: Penicillin, Sulfa</div>
-       <div class="ul">Conditions: Diabetes, HBP</div>
-       <div class="ul" style="color:#69f0ae">Insurance: Mutuelle de Santé ✓</div>
-       <div class="ul" style="color:#69f0ae">Member: MT-0123-KG-85</div>
-       <div class="ul">EC: Jean +250788456123</div>
-       <div class="ul" style="color:#555">──────────────────────</div>
-       <div class="ul" style="color:#555">Ref: ACC-2026-4821</div>
-       <div class="ul" style="color:#555">Audit logged ✓ &nbsp; Session closed.</div>`
-    ];
-    const step = Math.min(S.sc, 2);
-    const snav = ['Step 1: Menu','Step 2: Enter ID','Step 3: Result'];
-    setScr(`
-      <div class="ussd-bar">*800*UZA# &nbsp;·&nbsp; USSD Emergency Lookup &nbsp;·&nbsp; Any GSM phone</div>
-      <div class="ussd-screen">
-        <div class="um" style="margin-bottom:12px">No data signal — USSD fallback active</div>
-        ${steps[step]}
-        ${step<2
-          ? `<button class="ussd-btn" onclick="nxtU()">▶ Next step</button>`
-          : `<div style="margin-top:14px;font-size:10px;color:#444;font-family:'DM Mono',monospace">Session ended. Redial *800*UZA# to start a new lookup.</div>`
-        }
-      </div>`, snav);
+    const step = Math.min(S.sc, 3);
+    const snav = ['Menu','Enter ID','Result','Dismissed'];
+
+    const menuHTML = `<div class="ussd-overlay">
+      <div class="ussd-body">
+        <div class="ussd-text">
+          UbuzimaCard Emergency<br>
+          1) Lookup by National ID<br>
+          2) Lookup by Phone Number<br>
+          0) Exit
+        </div>
+      </div>
+      <div class="ussd-footer">
+        <button class="ussd-dismiss" onclick="goSc(3)">Dismiss</button>
+        <button class="ussd-reply" onclick="goSc(1)">Reply</button>
+      </div>
+    </div>`;
+
+    const enterHTML = `<div class="ussd-overlay">
+      <div class="ussd-body">
+        <div class="ussd-text">Enter 16-digit National ID</div>
+      </div>
+      <div class="ussd-input-area">
+        <input class="ussd-field" type="text" placeholder="e.g. 1198580000004 12" value="">
+        <div class="ussd-kb">
+          ${['1','2','3','4','5','6','7','8','9','*','0','#'].map(k=>`<button class="ussd-key">${k}</button>`).join('')}
+        </div>
+      </div>
+      <div class="ussd-footer">
+        <button class="ussd-dismiss" onclick="goSc(0)">Dismiss</button>
+        <button class="ussd-reply" onclick="goSc(2)">Reply</button>
+      </div>
+    </div>`;
+
+    const resultHTML = `<div class="ussd-overlay">
+      <div class="ussd-body">
+        <div class="ussd-text">
+          UWIMANA Marie, F, 12/08/1985<br>
+          Blood group: B+<br>
+          Allergy: Penicillin, Sulfa drugs<br>
+          Conditions: Diabetes, Hypertension<br>
+          Insurance: Mutuelle de Sante - Active<br>
+          Member ID: MT-0123-KG-85<br>
+          Emergency contact: Jean +250788456123<br>
+          Ref: ACC-2026-4821. Audit logged.
+        </div>
+      </div>
+      <div class="ussd-footer">
+        <button class="ussd-dismiss" onclick="goSc(3)">Dismiss</button>
+        <button class="ussd-reply" onclick="goSc(1)">Reply</button>
+      </div>
+    </div>`;
+
+    const dismissedHTML = `<div class="ussd-overlay" style="align-items:center;justify-content:center">
+      <div style="text-align:center;padding:40px 20px">
+        <div style="color:rgba(255,255,255,0.5);font-size:13px;font-family:-apple-system,sans-serif;margin-bottom:20px">Session ended</div>
+        <button class="ussd-reply" style="padding:12px 28px;border-radius:10px;width:auto" onclick="goSc(0)">Dial *800*UZA# again</button>
+      </div>
+    </div>`;
+
+    const screens = [menuHTML, enterHTML, resultHTML, dismissedHTML];
+    setScr(screens[step], snav);
     return;
   }
-  const nav = ['Lookup','Result'];
+  const nav = ['🔍 Lookup','📋 Result'];
   const lowWarn = S.conn==='low' ? `<div class="card" style="border-left:3px solid var(--amber-border)"><span class="bw">⚠ Weak signal</span><div style="font-size:11px;color:var(--text2);margin-top:4px">Showing cached profile. Last refresh: 2h ago. Clinically current.</div></div>` : '';
   if(!S.looked || S.sc===0) {
     setScr(`
@@ -615,37 +654,42 @@ function rCHW() {
   if(S.conn==='none') {
     if(S.reported) {
       setScr(`
-        <div class="ah"><div class="ah-t">SMS Report Sent</div><div class="ah-s">Via RapidPro · MOH Infrastructure</div></div>
-        <div class="sc">
-          <div class="card" style="border-left:3px solid var(--green-mid)">
-            <div class="card-title">Message sent</div>
-            <div class="smsb">REPORT MCH KG02 ANC_MISSED HIGH</div>
-            <div style="font-size:11px;color:var(--text2);margin-bottom:6px">System response received:</div>
-            <div class="smsb" style="color:#64dd17">Report received. Ref: CHW-2026-8821. Thank you.</div>
+        <div class="sms-screen">
+          <div class="sms-hdr">
+            <div class="sms-hdr-num">UbuzimaCard CHW</div>
+            <div class="sms-hdr-sub">+250 800 000 100 · RapidPro</div>
           </div>
-          <p style="font-size:11px;color:var(--text2);line-height:1.5">Report routes via RapidPro into the RHIE pipeline and feeds the National Health Intelligence Center.</p>
+          <div class="sms-body">
+            <div class="sms-time">Today 14:32</div>
+            <div class="sms-out">REPORT MCH KG02 ANC_MISSED HIGH</div>
+            <div class="sms-time">Today 14:32</div>
+            <div class="sms-in">Report received. Ref: CHW-2026-8821. Thank you. Your report has been logged and will be reviewed by the district health team.</div>
+          </div>
+          <div class="sms-compose">
+            <input class="sms-cinput" type="text" placeholder="Message">
+            <button class="sms-send">&#8593;</button>
+          </div>
         </div>`, []);
     } else {
       setScr(`
-        <div class="ah"><div class="ah-t">SMS Report Mode</div><div class="ah-s">No data signal — SMS active</div></div>
-        <div class="sc">
-          <div class="card" style="border-left:3px solid var(--amber-border)"><span class="bw">No data connection</span><p style="font-size:11px;color:var(--text2);margin-top:5px">Submit reports by SMS. Any basic GSM phone works. No smartphone needed.</p></div>
-          <div class="card">
-            <div class="card-title">SMS format</div>
-            <div class="smsb">REPORT [type] [district] [event] [severity]</div>
-            <div style="font-size:11px;color:var(--text2);margin-bottom:6px">Example:</div>
-            <div class="smsb">REPORT MCH KG02 ANC_MISSED HIGH</div>
+        <div class="sms-screen">
+          <div class="sms-hdr">
+            <div class="sms-hdr-num">UbuzimaCard CHW</div>
+            <div class="sms-hdr-sub">+250 800 000 100 · RapidPro</div>
           </div>
-          <div class="card">
-            <div class="card-title">Compose report</div>
-            <input type="text" placeholder="REPORT MCH KG02 ANC_MISSED HIGH" style="font-family:'DM Mono',monospace;font-size:11px">
-            <button class="bp" onclick="sendSms()">Send via SMS</button>
+          <div class="sms-body">
+            <div class="sms-time">Today 14:30</div>
+            <div class="sms-in">Muraho! Send your report using the format below. No data connection needed.<br><br>REPORT [type] [district] [event] [severity]<br><br>Example:<br>REPORT MCH KG02 ANC_MISSED HIGH</div>
+          </div>
+          <div class="sms-compose">
+            <input class="sms-cinput" type="text" id="smsin" placeholder="Type your report here...">
+            <button class="sms-send" onclick="sendSms()">&#8593;</button>
           </div>
         </div>`, []);
     }
     return;
   }
-  const nav=['Dashboard','Report','Confirmed'];
+  const nav=['📊 Dashboard','📝 Report','✓ Confirmed'];
   if(S.sc===0) {
     setScr(`
       <div class="ah"><div class="ah-t">CHW Dashboard</div><div class="ah-s">Gasabo District · Remera Sector</div></div>
@@ -700,7 +744,7 @@ function rCHW() {
 
 // ── PRIVATE PROVIDER ──
 function rProv() {
-  const nav=['Lookup','Log Visit','Submitted'];
+  const nav=['🔍 Lookup','📋 Log Visit','✓ Submitted'];
   if(!S.visited && S.sc<1) {
     setScr(`
       <div class="ah"><div class="ah-t">Patient Lookup</div><div class="ah-s">Consent verification required</div></div>
@@ -753,7 +797,7 @@ function rProv() {
 function render() {
   document.getElementById('role-btns').innerHTML = ROLES.map(r =>
     `<button class="role-btn${S.role===r.id?' active':''}" onclick="swR('${r.id}')">
-      ${r.icon ? `<span class="role-icon">${r.icon}</span>` : ''}${r.lbl}
+      <span class="role-icon">${r.icon}</span>${r.lbl}
     </button>`).join('');
   document.getElementById('conn-btns').innerHTML = CONNS.map(c =>
     `<button class="conn-btn${S.conn===c.id?' '+c.cls:''}" onclick="swC('${c.id}')">

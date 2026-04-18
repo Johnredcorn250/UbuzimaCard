@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UbuzimaCard — Prototype v1.0</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f4;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:24px 12px}
+#app{width:100%;max-width:420px;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.12);min-height:600px;display:flex;flex-direction:column}
+.screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+/* Colors */
+:root{--pri:#0A6A6A;--priL:#E8F5F5;--acc:#D97706;--accL:#FEF3C7;--dan:#DC2626;--danL:#FEE2E2;--suc:#059669;--sucL:#D1FAE5;--sur:#F8FAFB;--bor:rgba(0,0,0,0.1);--txt:#111;--mut:#666}
+/* Header */
+.hdr{padding:12px 16px;border-bottom:0.5px solid var(--bor);display:flex;align-items:center;justify-content:space-between;background:#fff;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-icon{width:30px;height:30px;border-radius:8px;background:var(--pri);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:600}
+.logo-name{font-weight:600;font-size:15px;color:var(--pri)}
+.switch-btn{border:none;background:none;cursor:pointer;font-size:12px;color:var(--mut);padding:4px 8px}
+/* Bottom nav */
+.bnav{display:flex;border-top:0.5px solid var(--bor);background:#fff;flex-shrink:0}
+.bnav-btn{flex:1;padding:8px 4px 10px;border:none;background:none;cursor:pointer;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px;font-family:inherit}
+.bnav-btn.active{color:var(--pri)}
+.bnav-btn .icon{font-size:17px}
+.bnav-btn .lbl{font-size:10px}
+.bnav-btn.active .lbl{font-weight:600}
+/* Common */
+.pad{padding:16px}
+.card{background:var(--sur);border-radius:12px;padding:14px;border:0.5px solid var(--bor);margin-bottom:10px}
+.label{display:block;font-size:11px;font-weight:600;color:var(--mut);letter-spacing:0.5px;margin-bottom:5px}
+.tag{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500}
+.pri-btn{width:100%;padding:12px;background:var(--pri);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.sec-btn{padding:8px 16px;border:0.5px solid var(--bor);border-radius:8px;background:none;cursor:pointer;font-size:13px;font-family:inherit}
+.inp{width:100%;padding:10px 12px;border-radius:8px;border:0.5px solid var(--bor);font-size:13px;font-family:inherit;background:#fff;color:var(--txt)}
+.inp:focus{outline:none;border-color:var(--pri)}
+textarea.inp{resize:none}
+select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-color:#fff}
+.field{margin-bottom:12px}
+/* Role selection */
+.role-card{display:flex;align-items:center;gap:14px;padding:14px;border-radius:14px;margin-bottom:9px;cursor:pointer;border:0.5px solid;transition:opacity 0.15s}
+.role-card:hover{opacity:0.88}
+.role-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;flex-shrink:0}
+/* Emergency card */
+.emg-card{background:var(--pri);border-radius:16px;padding:18px;color:#fff;margin-bottom:14px}
+.emg-card .section{border-top:0.5px solid rgba(255,255,255,0.2);padding-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.emg-label{font-size:9px;color:#9FE1CB;letter-spacing:1.5px;font-weight:600;margin-bottom:3px}
+/* QR */
+.qr-svg rect{fill:rgba(255,255,255,0.88)}
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+/* Info row */
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--bor)}
+.info-row:last-child{border-bottom:none}
+/* Alert box */
+.alert{border-radius:10px;padding:12px;margin-bottom:14px}
+/* Pill tabs */
+.pill-tabs{display:flex;gap:6px;margin-bottom:14px}
+.pill{padding:6px 14px;border-radius:20px;border:0.5px solid var(--bor);background:none;cursor:pointer;font-size:12px;font-family:inherit}
+.pill.active{border-color:var(--pri);background:var(--priL);color:var(--pri);font-weight:600}
+/* Success screen */
+.success{padding:16px;text-align:center;padding-top:48px}
+.success-icon{width:64px;height:64px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:28px}
+/* CHW stat */
+.chw-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.chw-stat{border-radius:10px;padding:10px 8px;text-align:center}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="root"></div>
+</div>
+
+<script>
+const C={pri:'#0A6A6A',priL:'#E8F5F5',acc:'#D97706',accL:'#FEF3C7',dan:'#DC2626',danL:'#FEE2E2',suc:'#059669',sucL:'#D1FAE5'};
+
+const PATIENT={name:'Claudine Uwimana',id:'1 1990 8 0012345 6 78',blood:'O+',dob:'12 March 1990',district:'Gasabo, Kigali',allergies:['Penicillin','Latex'],conditions:['Hypertension','Type 2 Diabetes'],meds:['Metformin 500mg — twice daily','Amlodipine 5mg — once daily'],ec:{name:'Jean Uwimana',rel:'Spouse',phone:'+250 722 654 321'}};
+const VISITS=[{date:'3 Apr 2026',fac:'Kacyiru Health Centre',type:'Outpatient',dr:'Dr. Hirwa',dx:'Hypertension review — BP 142/88',act:'Amlodipine dosage maintained'},{date:'14 Feb 2026',fac:'CHUK',type:'Lab',dr:'Lab Dept.',dx:'HbA1c: 7.2% · Fasting glucose: 138 mg/dL',act:'Continue Metformin'},{date:'8 Jan 2026',fac:'Kacyiru Health Centre',type:'Outpatient',dr:'Dr. Hirwa',dx:'Routine NCD check',act:'BP within target range'}];
+const CONSENTS=[{prov:'Kacyiru Health Centre',lvl:'Full record',exp:'31 Dec 2026',ok:true},{prov:'Dr. Hirwa (CHUK)',lvl:'Emergency profile only',exp:'30 Jun 2026',ok:true},{prov:'Pharmacie Conseil',lvl:'Medications only',exp:'1 Apr 2026',ok:false}];
+
+let state={role:null,tab:'home',reportStep:0,reportType:'',frStage:'login',labTab:'visits',consents:[...CONSENTS]};
+
+function setState(updates){Object.assign(state,updates);render();}
+
+function qrSVG(sz){
+  const p=[[1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1],[1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,1],[1,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0,1],[1,0,1,1,1,0,1,0,0,1,1,0,1,1,1,0,1],[1,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0,1],[1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,1],[1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1],[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0],[1,0,1,1,0,1,1,0,0,0,1,1,0,1,1,0,1],[0,1,0,0,1,0,0,1,1,0,0,0,1,0,1,1,0],[1,1,0,1,0,1,1,0,1,0,1,0,1,0,1,1,1],[0,0,0,0,0,0,0,0,1,1,0,1,0,1,0,0,0],[1,1,1,1,1,1,1,0,1,0,1,0,1,0,1,1,1],[1,0,0,0,0,0,1,0,0,1,0,1,0,1,0,0,1],[1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,1,1],[1,0,1,1,1,0,1,0,0,1,1,0,0,1,0,0,1],[1,0,1,1,1,0,1,0,1,0,0,1,1,0,1,0,1],[1,0,0,0,0,0,1,0,0,1,0,1,0,1,0,1,1],[1,1,1,1,1,1,1,0,1,0,1,0,1,0,1,1,1]];
+  const c=sz/19;
+  let rects='';
+  p.forEach((row,r)=>row.forEach((v,cl)=>{if(v)rects+=`<rect x="${cl*c}" y="${r*c}" width="${c-0.5}" height="${c-0.5}" rx="0.8"/>`;} ));
+  return `<svg class="qr-svg" width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}">${rects}</svg>`;
+}
+
+function tag(text,bg,color){return `<span class="tag" style="background:${bg};color:${color}">${text}</span>`;}
+
+function header(role){
+  const names={patient:'Patient Portal',responder:'First Responder',chw:'Community Health Worker',provider:'Private Provider'};
+  return `<div class="hdr">
+    <div class="logo"><div class="logo-icon">U</div><span class="logo-name">UbuzimaCard</span></div>
+    <button class="switch-btn" onclick="setState({role:null,tab:'home',reportStep:0,frStage:'login'})">← Switch role</button>
+  </div>`;
+}
+
+function bottomNav(){
+  const tabs=[{id:'home',l:'Home',ic:'⌂'},{id:'record',l:'Record',ic:'♥'},{id:'qr',l:'Card',ic:'⊞'},{id:'consent',l:'Access',ic:'⊙'},{id:'report',l:'Report',ic:'◉'}];
+  return `<div class="bnav">${tabs.map(t=>`<button class="bnav-btn${state.tab===t.id?' active':''}" onclick="setState({tab:'${t.id}'})"><span class="icon">${t.ic}</span><span class="lbl">${t.l}</span></button>`).join('')}</div>`;
+}
+
+function roleSelect(){
+  return `<div class="pad" style="padding-top:32px">
+    <div style="text-align:center;padding-bottom:24px">
+      <div style="width:56px;height:56px;border-radius:16px;background:${C.pri};margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff;font-weight:700">U</div>
+      <p style="font-size:10px;font-weight:600;letter-spacing:2px;color:#888;margin-bottom:4px">PROTOTYPE v1.0</p>
+      <h2 style="font-size:22px;font-weight:600;color:${C.pri};margin-bottom:4px">UbuzimaCard</h2>
+      <p style="font-size:13px;color:#888">Select your role to explore the platform</p>
+    </div>
+    ${[
+      {id:'patient',l:'Patient',s:'Health record, emergency card & community reporting',ic:'♥',c:C.pri,lc:'#E8F5F5'},
+      {id:'responder',l:'First Responder',s:'EMS · Red Cross Rwanda · Verified access portal',ic:'+',c:C.dan,lc:'#FEE2E2'},
+      {id:'chw',l:'Community Health Worker',s:'Field visit logging and household reporting',ic:'◉',c:C.suc,lc:'#D1FAE5'},
+      {id:'provider',l:'Private Provider',s:'Add consultation records to the national system',ic:'◈',c:C.acc,lc:'#FEF3C7'},
+    ].map(r=>`<div class="role-card" style="background:${r.lc};border-color:${r.c}" onclick="setState({role:'${r.id}',tab:'home',frStage:'login',reportStep:0})">
+      <div class="role-icon" style="background:${r.c}">${r.ic}</div>
+      <div><p style="font-weight:600;font-size:15px;color:${r.c};margin-bottom:2px">${r.l}</p><p style="font-size:12px;color:#888">${r.s}</p></div>
+    </div>`).join('')}
+    <p style="text-align:center;font-size:11px;color:#aaa;margin-top:16px">Simulated data only · UbuzimaCard concept prototype</p>
+  </div>`;
+}
+
+function patientHome(){
+  return `<div class="pad">
+    <div style="padding-top:8px;margin-bottom:14px"><p style="font-size:12px;color:#888">Saturday, 11 April 2026</p><h2 style="font-size:20px;font-weight:600;margin-top:2px">Hello, Claudine</h2></div>
+    <div onclick="setState({tab:'qr'})" style="background:${C.pri};border-radius:16px;padding:16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div>
+        <p style="font-size:10px;color:#9FE1CB;font-weight:600;letter-spacing:1.5px;margin-bottom:4px">EMERGENCY CARD</p>
+        <p style="font-size:18px;font-weight:600;color:#fff;margin-bottom:10px">Claudine Uwimana</p>
+        <div style="display:flex;gap:6px">${tag('O+','rgba(255,255,255,0.2)','#fff')}${tag('⚠ Penicillin','#DC2626','#fff')}</div>
+      </div>
+      ${qrSVG(72)}
+    </div>
+    <div class="stats-grid" style="margin-bottom:14px">
+      ${[{l:'Last visit',v:'8 days ago',s:'Kacyiru HC'},{l:'Active access',v:'2 providers',s:'1 expired'},{l:'Conditions',v:'2 chronic',s:'NCD tracked'},{l:'Mutuelle',v:'Active',s:'Expires Dec 2026'}].map(s=>`<div class="card" style="margin-bottom:0"><p style="font-size:11px;color:#888;margin-bottom:3px">${s.l}</p><p style="font-size:15px;font-weight:600;margin-bottom:2px">${s.v}</p><p style="font-size:11px;color:#888">${s.s}</p></div>`).join('')}
+    </div>
+    <p style="font-size:11px;font-weight:600;color:#888;letter-spacing:0.5px;margin-bottom:8px">QUICK ACTIONS</p>
+    ${[{l:'Report a community health concern',c:'#FEF3C7',t:C.acc,ic:'◉',tab:'report'},{l:'View medication reminders',c:'#D1FAE5',t:C.suc,ic:'◎',tab:'record'},{l:'Download wallet card for printing',c:'#E8F5F5',t:C.pri,ic:'⊞',tab:'qr'}].map(a=>`<div onclick="setState({tab:'${a.tab}'})" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:${a.c};border-radius:10px;margin-bottom:7px;cursor:pointer"><span style="font-size:16px;color:${a.t}">${a.ic}</span><span style="font-size:13px;color:${a.t};font-weight:600">${a.l}</span></div>`).join('')}
+    <div class="card" style="margin-top:6px"><p style="font-size:11px;color:#888;margin-bottom:6px">YOUR COMMUNITY HEALTH WORKER</p><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:50%;background:${C.priL||'#E8F5F5'};display:flex;align-items:center;justify-content:center;font-size:13px;color:${C.pri};font-weight:600">EM</div><div><p style="font-weight:600;font-size:14px">Esperance Mukamana</p><p style="font-size:12px;color:#888">Gasabo District · Active</p></div></div></div>
+  </div>`;
+}
+
+function emergencyCard(){
+  return `<div class="pad">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:4px;margin-top:8px">Emergency Card</h3>
+    <p style="font-size:13px;color:#888;margin-bottom:14px">Accessible on your lock screen. First responders scan the QR or use the verified portal.</p>
+    <div class="emg-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+        <div>
+          <p class="emg-label">UBUZIMACARD · RWANDA</p>
+          <p style="font-size:19px;font-weight:600;margin-bottom:4px">Claudine Uwimana</p>
+          <p style="font-size:11px;color:#9FE1CB">ID: 1 1990 8 0012345 6 78</p>
+        </div>
+        ${qrSVG(84)}
+      </div>
+      <div class="section">
+        <div><p class="emg-label">BLOOD TYPE</p><p style="font-size:26px;font-weight:700">O+</p></div>
+        <div><p class="emg-label">DATE OF BIRTH</p><p style="font-size:13px">12 March 1990</p></div>
+        <div style="grid-column:1/-1"><p class="emg-label">CRITICAL ALLERGIES</p><div style="display:flex;gap:6px">${tag('Penicillin','#DC2626','#fff')}${tag('Latex','#DC2626','#fff')}</div></div>
+        <div style="grid-column:1/-1"><p class="emg-label">CONDITIONS</p><p style="font-size:13px">Hypertension · Type 2 Diabetes</p></div>
+        <div style="grid-column:1/-1"><p class="emg-label">EMERGENCY CONTACT</p><p style="font-size:13px">Jean Uwimana (Spouse) · +250 722 654 321</p></div>
+      </div>
+    </div>
+    <div class="card"><p style="font-size:12px;font-weight:600;color:#888;letter-spacing:0.5px;margin-bottom:8px">HOW RESPONDERS ACCESS THIS</p>
+      ${['QR code — scan with any camera, no app needed','Wallet card — print and carry, works without your phone','Verified portal — EMS and Red Cross search by ID after logging in with their credentials'].map((s,i)=>`<div style="display:flex;gap:10px;margin-bottom:7px;align-items:flex-start"><span style="width:19px;height:19px;border-radius:50%;background:${C.priL||'#E8F5F5'};color:${C.pri};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0">${i+1}</span><p style="font-size:13px">${s}</p></div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function healthRecord(){
+  const t=state.labTab||'visits';
+  return `<div class="pad">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:4px;margin-top:8px">Health Record</h3>
+    <p style="font-size:13px;color:#888;margin-bottom:12px">Synced from e-Ubuzima · Last updated 3 Apr 2026</p>
+    <div class="pill-tabs">
+      ${['visits','medications','labs'].map(x=>`<button class="pill${t===x?' active':''}" onclick="setState({labTab:'${x}'})">${x.charAt(0).toUpperCase()+x.slice(1)}</button>`).join('')}
+    </div>
+    ${t==='visits'?VISITS.map(v=>`<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px"><div><p style="font-weight:600;font-size:14px">${v.fac}</p><p style="font-size:12px;color:#888">${v.date} · ${v.dr}</p></div>${tag(v.type,C.priL||'#E8F5F5',C.pri)}</div><p style="font-size:13px;margin-bottom:4px">${v.dx}</p><p style="font-size:12px;color:${C.suc}">→ ${v.act}</p></div>`).join(''):''}
+    ${t==='medications'?PATIENT.meds.map(m=>`<div class="card"><div style="display:flex;align-items:center;gap:12px"><div style="width:36px;height:36px;border-radius:10px;background:${C.priL||'#E8F5F5'};display:flex;align-items:center;justify-content:center;font-size:18px;color:${C.pri}">⬡</div><div><p style="font-weight:600;font-size:14px">${m.split(' — ')[0]}</p><p style="font-size:12px;color:#888">${m.split(' — ')[1]}</p></div></div></div>`).join(''):''}
+    ${t==='labs'?`<div class="card"><p style="font-weight:600;font-size:14px;margin-bottom:12px">Latest results — 14 Feb 2026</p>${[{n:'HbA1c',v:'7.2%',r:'Target <7.0%',ok:false},{n:'Fasting glucose',v:'138 mg/dL',r:'Target 70–100',ok:false},{n:'Blood pressure',v:'142/88',r:'Target <130/80',ok:false},{n:'Creatinine',v:'0.9 mg/dL',r:'Normal 0.6–1.2',ok:true}].map(l=>`<div class="info-row"><div><p style="font-weight:600;font-size:13px">${l.n}</p><p style="font-size:11px;color:#888">${l.r}</p></div><span style="font-size:14px;font-weight:600;color:${l.ok?C.suc:C.acc}">${l.v}</span></div>`).join('')}</div>`:''}
+  </div>`;
+}
+
+function consentManager(){
+  const cs=state.consents;
+  return `<div class="pad">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:4px;margin-top:8px">Access Control</h3>
+    <p style="font-size:13px;color:#888;margin-bottom:14px">You decide who can see your health data and at what level.</p>
+    ${cs.map((c,i)=>`<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px"><p style="font-weight:600;font-size:14px">${c.prov}</p>${tag(c.ok?'active':'expired',c.ok?'#D1FAE5':'#FEE2E2',c.ok?C.suc:C.dan)}</div><p style="font-size:12px;color:#888;margin-bottom:2px">Level: ${c.lvl}</p><p style="font-size:12px;color:#888;margin-bottom:10px">Expires: ${c.exp}</p><div style="display:flex;gap:8px"><button class="sec-btn" style="flex:1">Edit</button><button class="sec-btn" style="color:${C.dan};border-color:${C.dan};background:#FEE2E2" onclick="revokeConsent(${i})">Revoke</button></div></div>`).join('')}
+    <button style="width:100%;padding:12px;border:0.5px dashed ${C.pri};border-radius:12px;background:#E8F5F5;cursor:pointer;font-size:14px;color:${C.pri};font-weight:600;margin-top:4px;font-family:inherit">+ Grant access to a provider</button>
+  </div>`;
+}
+
+function communityReport(){
+  const types=[{id:'symptom',l:'Illness symptoms in my community',ic:'⚕'},{id:'water',l:'Suspected contaminated water source',ic:'◌'},{id:'service',l:'Health facility feedback',ic:'◈'},{id:'other',l:'Other health concern',ic:'◉'}];
+  if(state.reportDone)return `<div class="success"><div class="success-icon" style="background:${C.sucL};color:${C.suc}">✓</div><h3 style="font-weight:600;margin-bottom:8px">Report submitted</h3><p style="font-size:14px;color:#888;margin-bottom:8px">Sent to Gasabo District Health Office.</p><p style="font-size:12px;color:#888;margin-bottom:6px">Reference: RPT-2026-04-8821</p><p style="font-size:12px;color:#888;margin-bottom:20px">Your name and ID were not shared. Response expected within 48 hours.</p><button class="sec-btn" onclick="setState({reportDone:false,reportStep:0,reportType:''})">Submit another report</button></div>`;
+  return `<div class="pad">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:4px;margin-top:8px">Community Report</h3>
+    <p style="font-size:13px;color:#888;margin-bottom:14px">Your feedback reaches the district health office and Rwanda Biomedical Centre.</p>
+    ${state.reportStep===0?`<p style="font-size:13px;font-weight:600;margin-bottom:10px">What would you like to report?</p>${types.map(t=>`<div onclick="setState({reportType:'${t.id}',reportStep:1})" style="display:flex;align-items:center;gap:12px;padding:14px;background:#F8FAFB;border-radius:12px;margin-bottom:8px;cursor:pointer;border:0.5px solid rgba(0,0,0,0.1)"><span style="font-size:20px">${t.ic}</span><span style="font-size:14px;font-weight:600">${t.l}</span></div>`).join('')}`:''}
+    ${state.reportStep===1?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px"><button onclick="setState({reportStep:0})" style="border:none;background:none;cursor:pointer;font-size:18px;color:#888">←</button><span style="font-size:13px;color:#888">${types.find(t=>t.id===state.reportType)?.l}</span></div>
+    <div class="field"><label class="label">LOCATION</label><input class="inp" value="Kimironko Sector, Gasabo"/></div>
+    <div class="field"><label class="label">DESCRIBE THE CONCERN</label><textarea class="inp" rows="4" placeholder="What have you observed?"></textarea></div>
+    <div class="field"><label class="label">ESTIMATED PEOPLE AFFECTED</label><select class="inp"><option>1–5 people</option><option>6–20 people</option><option>More than 20</option><option>Unknown</option></select></div>
+    <div class="alert" style="background:${C.accL}"><p style="font-size:12px;color:${C.acc}">Your report will be anonymised. Your name and ID are not shared with district officers.</p></div>
+    <button class="pri-btn" onclick="setState({reportDone:true})">Submit report</button>`:''}
+  </div>`;
+}
+
+function firstResponder(){
+  if(state.frStage==='login')return `<div class="pad">
+    <div style="text-align:center;padding:20px 0 16px"><div style="width:56px;height:56px;border-radius:50%;background:${C.danL};margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:24px;color:${C.dan}">+</div><h3 style="font-weight:600;margin-bottom:4px">First Responder Portal</h3><p style="font-size:13px;color:#888">EMS · Red Cross Rwanda · Verified CHWs</p></div>
+    <div class="alert" style="background:${C.danL}"><p style="font-size:12px;color:${C.dan};font-weight:600">All access is logged with timestamp, location, and responder ID. For credentialled emergency responders only.</p></div>
+    <div class="field"><label class="label">RESPONDER ID</label><input class="inp" value="EMS-RW-00412"/></div>
+    <div class="field"><label class="label">PIN</label><input class="inp" type="password" value="000000"/></div>
+    <button class="pri-btn" style="background:${C.dan}" onclick="setState({frStage:'search'})">Access emergency portal</button>
+    <p style="text-align:center;font-size:11px;color:#aaa;margin-top:10px">Access logged with timestamp and location</p>
+  </div>`;
+  if(state.frStage==='search')return `<div class="pad">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:8px;height:8px;border-radius:50%;background:${C.suc};display:inline-block"></span><span style="font-size:12px;color:${C.suc};font-weight:600">Verified: Mugabo Eric — EMS-RW-00412</span></div>
+    <h3 style="font-weight:600;margin-bottom:4px">Find patient</h3>
+    <p style="font-size:13px;color:#888;margin-bottom:14px">Search by national ID. Use QR scan when the patient's phone is accessible.</p>
+    <div class="field"><label class="label">NATIONAL ID NUMBER</label><input class="inp" id="frId" placeholder="e.g. 1 1990 8 0012345 6 78"/></div>
+    <button class="pri-btn" style="background:${C.dan};margin-bottom:14px" onclick="frSearch()">Search patient record</button>
+    <div class="card"><p style="font-size:12px;font-weight:600;color:#888;margin-bottom:6px">OR SCAN QR CODE</p><p style="font-size:13px">Point your camera at the QR code on the patient's lock screen or printed wallet card — no app required.</p></div>
+  </div>`;
+  return `<div class="pad">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><button onclick="setState({frStage:'search'})" style="border:none;background:none;cursor:pointer;font-size:18px;color:#888">←</button><span style="font-size:13px;font-weight:600">Emergency profile</span></div>
+    <div style="background:${C.dan};border-radius:16px;padding:16px;color:#fff;margin-bottom:12px">
+      <p style="font-size:10px;letter-spacing:1.5px;font-weight:600;color:#FCA5A5;margin-bottom:4px">EMERGENCY ONLY — RESPONDER VIEW</p>
+      <p style="font-size:19px;font-weight:600;margin-bottom:12px">Claudine Uwimana</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:0.5px solid rgba(255,255,255,0.2);padding-top:12px">
+        <div><p style="font-size:9px;color:#FCA5A5;letter-spacing:1px;margin-bottom:2px">BLOOD TYPE</p><p style="font-size:28px;font-weight:700">O+</p></div>
+        <div><p style="font-size:9px;color:#FCA5A5;letter-spacing:1px;margin-bottom:2px">AGE</p><p style="font-size:28px;font-weight:700">36</p></div>
+      </div>
+    </div>
+    ${[{l:'CRITICAL ALLERGIES',c:'Penicillin · Latex',u:true},{l:'CHRONIC CONDITIONS',c:'Hypertension · Type 2 Diabetes',u:false},{l:'CURRENT MEDICATIONS',c:'Metformin 500mg (twice daily)\nAmlodipine 5mg (once daily)',u:false},{l:'EMERGENCY CONTACT',c:'Jean Uwimana (Spouse)\n+250 722 654 321',u:false}].map(s=>`<div style="background:${s.u?C.danL:'#F8FAFB'};border-radius:12px;padding:14px;margin-bottom:10px;border:0.5px solid ${s.u?C.dan:'rgba(0,0,0,0.1)'}"><p style="font-size:11px;font-weight:600;color:${s.u?C.dan:'#888'};letter-spacing:0.5px;margin-bottom:4px">${s.l}</p><p style="font-size:14px;white-space:pre-line">${s.c}</p></div>`).join('')}
+    <div class="card"><p style="font-size:11px;color:#888">Access logged: 11 Apr 2026 · 14:32 · Responder: Mugabo Eric (EMS-RW-00412) · Kigali</p></div>
+  </div>`;
+}
+
+function chwPortal(){
+  if(state.chwDone)return `<div class="success"><div class="success-icon" style="background:${C.sucL};color:${C.suc}">✓</div><h3 style="font-weight:600;margin-bottom:8px">Visit logged</h3><p style="font-size:14px;color:#888;margin-bottom:20px">Report submitted to Gasabo District Health Office.</p><button class="sec-btn" onclick="setState({chwDone:false})">Log another visit</button></div>`;
+  return `<div class="pad">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><div style="width:40px;height:40px;border-radius:50%;background:#E8F5F5;display:flex;align-items:center;justify-content:center;font-size:13px;color:${C.pri};font-weight:700">EM</div><div><p style="font-weight:600;font-size:15px">Esperance Mukamana</p><p style="font-size:12px;color:#888">CHW · Gasabo · 47 households</p></div></div>
+    <div class="chw-stats">
+      ${[{l:'Visits today',v:'6',al:false},{l:'Reports sent',v:'3',al:false},{l:'Alerts',v:'1',al:true}].map(s=>`<div class="chw-stat" style="background:${s.al?C.danL:'#F8FAFB'};border:0.5px solid ${s.al?C.dan:'rgba(0,0,0,0.1)'}"><p style="font-size:20px;font-weight:700;color:${s.al?C.dan:'#111'}">${s.v}</p><p style="font-size:10px;color:${s.al?C.dan:'#888'}">${s.l}</p></div>`).join('')}
+    </div>
+    <h4 style="font-weight:600;font-size:14px;margin-bottom:10px">Log a home visit</h4>
+    <div class="field"><label class="label">HOUSEHOLD / PATIENT</label><input class="inp" value="Uwimana household — Kimironko"/></div>
+    <div class="field"><label class="label">VISIT TYPE</label><select class="inp"><option>Routine NCD follow-up</option><option>Maternal health check</option><option>Vaccination follow-up</option><option>Community symptom report</option></select></div>
+    <div class="field"><label class="label">OBSERVATIONS</label><textarea class="inp" rows="3">Patient compliant with Metformin. BP measured at 138/86 — improved from last visit. Advised on low-sodium diet.</textarea></div>
+    <div style="margin-bottom:14px"><label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked/>Flag for district health officer review</label></div>
+    <button class="pri-btn" onclick="setState({chwDone:true})">Submit visit report</button>
+  </div>`;
+}
+
+function providerPortal(){
+  if(state.provDone)return `<div class="success"><div class="success-icon" style="background:${C.sucL};color:${C.suc}">✓</div><h3 style="font-weight:600;margin-bottom:8px">Record synced</h3><p style="font-size:14px;color:#888;margin-bottom:20px">Consultation note submitted and synced to the patient's e-Ubuzima record via RHIE.</p><button class="sec-btn" onclick="setState({provDone:false})">Add another record</button></div>`;
+  return `<div class="pad">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><div style="width:40px;height:40px;border-radius:10px;background:#E8F5F5;display:flex;align-items:center;justify-content:center;font-size:13px;color:${C.pri};font-weight:700">CP</div><div><p style="font-weight:600;font-size:15px">Cabinet Plus Clinic</p><p style="font-size:12px;color:#888">Private provider · Kiyovu, Kigali</p></div></div>
+    <div class="alert" style="background:#E8F5F5"><p style="font-size:12px;color:${C.pri}">Records submitted here sync to the patient's national e-Ubuzima record via RHIE with patient consent. You are contributing to Rwanda's single national health record.</p></div>
+    <div class="field"><label class="label">PATIENT NATIONAL ID</label><input class="inp" value="1 1990 8 0012345 6 78"/></div>
+    <div class="field"><label class="label">DATE OF CONSULTATION</label><input class="inp" type="date" value="2026-04-11"/></div>
+    <div class="field"><label class="label">DIAGNOSIS / FINDINGS</label><textarea class="inp" rows="3" placeholder="Describe diagnosis or clinical findings..."></textarea></div>
+    <div class="field"><label class="label">PRESCRIPTION / TREATMENT</label><textarea class="inp" rows="2" placeholder="Medications prescribed or treatment given..."></textarea></div>
+    <div style="margin-bottom:14px"><label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked/>Patient has consented to record sharing with e-Ubuzima</label></div>
+    <button class="pri-btn" onclick="setState({provDone:true})">Submit to national record</button>
+  </div>`;
+}
+
+function revokeConsent(i){state.consents=state.consents.filter((_,j)=>j!==i);render();}
+function frSearch(){
+  const btn=document.querySelector('.pri-btn');
+  if(btn){btn.textContent='Searching...';btn.disabled=true;}
+  setTimeout(()=>setState({frStage:'result'}),1400);
+}
+
+function render(){
+  const root=document.getElementById('root');
+  if(!state.role){root.innerHTML=roleSelect();return;}
+  let body='';
+  if(state.role==='patient'){
+    const screens={home:patientHome,qr:emergencyCard,record:healthRecord,consent:consentManager,report:communityReport};
+    body=(screens[state.tab]||patientHome)();
+  }else if(state.role==='responder'){body=firstResponder();}
+  else if(state.role==='chw'){body=chwPortal();}
+  else if(state.role==='provider'){body=providerPortal();}
+  root.innerHTML=header(state.role)+`<div class="screen">${body}</div>`+(state.role==='patient'?bottomNav():'');
+}
+
+render();
+</script>
+</body>
+</html>

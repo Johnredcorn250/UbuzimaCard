@@ -351,7 +351,7 @@
       <div class="phone-notch"><div class="notch-pill"></div></div>
       <div class="phone-status">
         <span class="ps-time">09:41</span>
-        <span class="ps-sig" id="sig-txt">●●● Full signal</span>
+        <span class="ps-sig" id="sig-txt">Full Full signal</span>
       </div>
       <div class="phone-screen" id="pscr">
         <div style="padding:1rem;font-size:13px;color:var(--text3)">Loading...</div>
@@ -388,16 +388,16 @@ const pt = {
 };
 
 const ROLES = [
-  { id:'patient', icon:'👤', lbl:'Patient / Citizen' },
-  { id:'fr',      icon:'🚑', lbl:'First Responder' },
-  { id:'chw',     icon:'🏘', lbl:'Community Health Worker' },
-  { id:'prov',    icon:'🏥', lbl:'Private Provider' }
+  { id:'patient', lbl:'Patient / Citizen' },
+  { id:'fr',      lbl:'First Responder' },
+  { id:'chw',     lbl:'Community Health Worker' },
+  { id:'prov',    lbl:'Private Provider' }
 ];
 
 const CONNS = [
-  { id:'full', lbl:'Full connectivity', cls:'active-full', sig:'●●● Full signal' },
-  { id:'low',  lbl:'Low / intermittent', cls:'active-low',  sig:'●○○ Weak signal' },
-  { id:'none', lbl:'No connectivity',    cls:'active-none', sig:'✕  Offline' }
+  { id:'full', lbl:'Full connectivity', cls:'active-full', sig:'Full Full signal' },
+  { id:'low',  lbl:'Low / intermittent', cls:'active-low',  sig:'Weak Weak signal' },
+  { id:'none', lbl:'No connectivity',    cls:'active-none', sig:'Offline' }
 ];
 
 const CTX = {
@@ -469,10 +469,10 @@ function setScr(html, nav) {
 
 // ── PATIENT ──
 function rPatient() {
-  const nav=['🏠 Home','👤 Profile','🔐 Consent'];
+  const nav=['Home',' Profile','Consent'];
   if(S.sc===0) {
     setScr(`
-      <div class="ah"><div class="ah-t">UbuzimaCard</div><div class="ah-s">Muraho, Marie 👋</div></div>
+      <div class="ah"><div class="ah-t">UbuzimaCard</div><div class="ah-s">Muraho, Marie </div></div>
       <div class="sc">
         <div class="card" style="border-left:3px solid var(--green-mid)">
           <div class="card-title">Your emergency card</div>
@@ -480,7 +480,7 @@ function rPatient() {
           <div style="font-size:12px;color:var(--text2)">Blood type: <strong>${pt.blood}</strong> &nbsp;·&nbsp; NID on file</div>
           <div style="margin-top:8px;display:flex;gap:5px;flex-wrap:wrap">
             <span class="bs">${pt.ins} ✓</span>
-            <span class="bw">⚠ Allergy: Penicillin</span>
+            <span class="bw">Alert: Allergy: Penicillin</span>
           </div>
         </div>
         <div class="sg">
@@ -495,7 +495,7 @@ function rPatient() {
       </div>`, nav);
   } else if(S.sc===1) {
     setScr(`
-      <div class="ah-red">⚠ EMERGENCY HEALTH PROFILE</div>
+      <div class="ah-red">Alert: EMERGENCY HEALTH PROFILE</div>
       <div class="ah2"><div class="ah-t">${pt.name}</div><div class="ah-s">DOB: ${pt.dob} &nbsp;·&nbsp; Sex: ${pt.sex}</div></div>
       <div class="sc">
         <div class="card">
@@ -606,8 +606,8 @@ function rFR() {
     setScr(screens[step], snav);
     return;
   }
-  const nav = ['🔍 Lookup','📋 Result'];
-  const lowWarn = S.conn==='low' ? `<div class="card" style="border-left:3px solid var(--amber-border)"><span class="bw">⚠ Weak signal</span><div style="font-size:11px;color:var(--text2);margin-top:4px">Showing cached profile. Last refresh: 2h ago. Clinically current.</div></div>` : '';
+  const nav = ['Lookup','Result'];
+  const lowWarn = S.conn==='low' ? `<div class="card" style="border-left:3px solid var(--amber-border)"><span class="bw">Alert: Weak signal</span><div style="font-size:11px;color:var(--text2);margin-top:4px">Showing cached profile. Last refresh: 2h ago. Clinically current.</div></div>` : '';
   if(!S.looked || S.sc===0) {
     setScr(`
       <div class="ah"><div class="ah-t">Emergency Lookup</div><div class="ah-s">${S.conn==='low'?'Low signal — reading from cache':'Live RHIE lookup'}</div></div>
@@ -626,7 +626,7 @@ function rFR() {
       </div>`, nav);
   } else {
     setScr(`
-      <div class="ah-red">⚠ EMERGENCY PROFILE — VERIFIED ACCESS</div>
+      <div class="ah-red">Alert: EMERGENCY PROFILE — VERIFIED ACCESS</div>
       <div class="ah2"><div class="ah-t">${pt.name}</div><div class="ah-s">DOB: ${pt.dob} &nbsp;·&nbsp; ${pt.sex} &nbsp;·&nbsp; Blood: ${pt.blood}</div></div>
       <div class="sc">
         <div class="card" style="border-left:3px solid var(--red-border)">
@@ -689,12 +689,12 @@ function rCHW() {
     }
     return;
   }
-  const nav=['📊 Dashboard','📝 Report','✓ Confirmed'];
+  const nav=['Dashboard','Report','Confirmed'];
   if(S.sc===0) {
     setScr(`
       <div class="ah"><div class="ah-t">CHW Dashboard</div><div class="ah-s">Gasabo District · Remera Sector</div></div>
       <div class="sc">
-        ${S.conn==='low'?`<div class="card" style="border-left:3px solid var(--amber-border)"><span class="bw">⚠ Weak signal</span><p style="font-size:11px;color:var(--text2);margin-top:4px">Reports will queue locally and sync when signal improves.</p></div>`:''}
+        ${S.conn==='low'?`<div class="card" style="border-left:3px solid var(--amber-border)"><span class="bw">Alert: Weak signal</span><p style="font-size:11px;color:var(--text2);margin-top:4px">Reports will queue locally and sync when signal improves.</p></div>`:''}
         <div class="sg">
           <div class="sc2"><div class="sn">47</div><div class="sl">Patients assigned</div></div>
           <div class="sc2"><div class="sn">12</div><div class="sl">Reports this month</div></div>
@@ -744,7 +744,7 @@ function rCHW() {
 
 // ── PRIVATE PROVIDER ──
 function rProv() {
-  const nav=['🔍 Lookup','📋 Log Visit','✓ Submitted'];
+  const nav=['Lookup','Log Visit','Submitted'];
   if(!S.visited && S.sc<1) {
     setScr(`
       <div class="ah"><div class="ah-t">Patient Lookup</div><div class="ah-s">Consent verification required</div></div>
@@ -797,7 +797,7 @@ function rProv() {
 function render() {
   document.getElementById('role-btns').innerHTML = ROLES.map(r =>
     `<button class="role-btn${S.role===r.id?' active':''}" onclick="swR('${r.id}')">
-      <span class="role-icon">${r.icon}</span>${r.lbl}
+      ${r.lbl}
     </button>`).join('');
   document.getElementById('conn-btns').innerHTML = CONNS.map(c =>
     `<button class="conn-btn${S.conn===c.id?' '+c.cls:''}" onclick="swC('${c.id}')">

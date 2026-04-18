@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UbuzimaCard — Platform Demo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-dark: #0B5E47;
+    --green-mid: #1D9E75;
+    --green-light: #EAF3DE;
+    --green-text: #3B6D11;
+    --amber-bg: #FAEEDA;
+    --amber-text: #854F0B;
+    --amber-border: #EF9F27;
+    --red-bg: #FCEBEB;
+    --red-text: #A32D2D;
+    --red-border: #E24B4A;
+    --blue-bg: #E6F1FB;
+    --blue-text: #185FA5;
+    --bg: #F0F4F1;
+    --surface: #FFFFFF;
+    --surface2: #F7F9F8;
+    --border: rgba(0,0,0,0.09);
+    --border2: rgba(0,0,0,0.15);
+    --text: #111A17;
+    --text2: #4A5E57;
+    --text3: #8A9E98;
+    --phone-w: 300px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.10);
+  }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOP NAV ── */
+  .topnav {
+    background: var(--green-dark);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topnav-logo { display: flex; align-items: center; gap: 10px; }
+  .logo-mark {
+    width: 32px; height: 32px; background: #fff;
+    border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; font-size: 16px; font-weight: 600; color: var(--green-dark);
+    letter-spacing: -0.5px;
+  }
+  .logo-text { color: #fff; font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
+  .logo-sub { color: rgba(255,255,255,0.55); font-size: 12px; margin-left: 8px; }
+  .topnav-meta { color: rgba(255,255,255,0.5); font-size: 12px; }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 220px 1fr 260px;
+    gap: 0;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 28px 20px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* ── LEFT PANEL ── */
+  .left-panel { display: flex; flex-direction: column; gap: 12px; }
+  .panel-label {
+    font-size: 10px; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.8px; color: var(--text3); margin-bottom: 4px;
+  }
+  .role-btn {
+    width: 100%; text-align: left; padding: 10px 14px;
+    border: 1px solid var(--border); border-radius: 10px;
+    background: var(--surface); color: var(--text2);
+    font-family: 'DM Sans', sans-serif; font-size: 13px;
+    cursor: pointer; transition: all 0.15s;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .role-btn:hover { background: var(--green-light); border-color: var(--green-mid); color: var(--green-dark); }
+  .role-btn.active {
+    background: var(--green-dark); color: #fff;
+    border-color: var(--green-dark); font-weight: 500;
+  }
+  .role-icon { font-size: 16px; width: 20px; text-align: center; }
+
+  .conn-group { display: flex; flex-direction: column; gap: 6px; }
+  .conn-btn {
+    width: 100%; text-align: left; padding: 8px 12px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--surface); color: var(--text2);
+    font-family: 'DM Sans', sans-serif; font-size: 12px;
+    cursor: pointer; transition: all 0.15s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .conn-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .conn-btn.active-full { background: var(--green-light); border-color: var(--green-mid); color: var(--green-text); font-weight: 500; }
+  .conn-btn.active-full .conn-dot { background: var(--green-mid); }
+  .conn-btn.active-low { background: var(--amber-bg); border-color: var(--amber-border); color: var(--amber-text); font-weight: 500; }
+  .conn-btn.active-low .conn-dot { background: var(--amber-border); }
+  .conn-btn.active-none { background: var(--red-bg); border-color: var(--red-border); color: var(--red-text); font-weight: 500; }
+  .conn-btn.active-none .conn-dot { background: var(--red-border); }
+  .conn-dot-default { background: var(--border2); }
+
+  .divider { height: 1px; background: var(--border); }
+
+  /* ── PHONE ── */
+  .phone-wrap { display: flex; justify-content: center; }
+  .phone {
+    width: var(--phone-w);
+    border: 8px solid #111;
+    border-radius: 38px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.12);
+    background: #111;
+  }
+  .phone-notch {
+    background: #111; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .notch-pill { width: 80px; height: 16px; background: #000; border-radius: 8px; }
+  .phone-status {
+    background: #111; display: flex;
+    justify-content: space-between; padding: 2px 16px 6px;
+  }
+  .ps-time { color: #ccc; font-size: 11px; font-family: 'DM Mono', monospace; font-weight: 500; }
+  .ps-sig { color: #ccc; font-size: 10px; font-family: 'DM Mono', monospace; }
+  .phone-screen {
+    height: 540px; overflow-y: auto; overflow-x: hidden;
+    background: #F0F4F1; scroll-behavior: smooth;
+  }
+  .phone-screen::-webkit-scrollbar { width: 3px; }
+  .phone-screen::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 2px; }
+  .phone-nav {
+    background: #fff; border-top: 1px solid rgba(0,0,0,0.08);
+    display: flex; padding: 8px 0 4px;
+  }
+  .pnb {
+    flex: 1; text-align: center; font-size: 10px; color: #8A9E98;
+    cursor: pointer; padding: 4px 2px; border: none; background: none;
+    font-family: 'DM Sans', sans-serif; transition: color 0.15s; line-height: 1.5;
+  }
+  .pnb.on { color: var(--green-dark); font-weight: 600; }
+  .phone-home-bar { background: #111; height: 20px; display: flex; align-items: center; justify-content: center; }
+  .home-indicator { width: 100px; height: 4px; background: #444; border-radius: 2px; }
+
+  /* ── APP HEADER ── */
+  .ah { background: var(--green-dark); padding: 14px 16px; }
+  .ah-t { color: #fff; font-size: 16px; font-weight: 600; letter-spacing: -0.3px; }
+  .ah-s { color: rgba(255,255,255,0.65); font-size: 11px; margin-top: 2px; }
+  .ah2 { background: #1a5c47; padding: 14px 16px; }
+  .ah-red { background: #7B1C1C; padding: 8px 16px; font-size: 11px; font-weight: 600; color: #fff; text-align: center; letter-spacing: 0.3px; }
+
+  /* ── SCREEN CONTENT ── */
+  .sc { padding: 10px; }
+  .card {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;
+  }
+  .card-title {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.6px; color: var(--text3); margin-bottom: 8px;
+  }
+  .info-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px;
+  }
+  .info-row:last-child { border: none; padding-bottom: 0; }
+  .il { color: var(--text2); }
+  .iv { color: var(--text); font-weight: 500; }
+
+  /* badges */
+  .bs { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 500; background: var(--green-light); color: var(--green-text); }
+  .bw { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 500; background: var(--amber-bg); color: var(--amber-text); }
+  .bd { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 500; background: var(--red-bg); color: var(--red-text); }
+  .bi { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 500; background: var(--blue-bg); color: var(--blue-text); }
+
+  /* grid stats */
+  .sg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+  .sc2 { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+  .sn { font-size: 24px; font-weight: 600; color: var(--text); line-height: 1; }
+  .sl { font-size: 10px; color: var(--text3); margin-top: 3px; }
+
+  /* buttons */
+  .bp {
+    width: 100%; padding: 10px; background: var(--green-dark); color: #fff;
+    border: none; border-radius: 9px; font-size: 13px; font-weight: 600;
+    cursor: pointer; margin-top: 6px; font-family: 'DM Sans', sans-serif;
+    letter-spacing: -0.1px; transition: background 0.15s;
+  }
+  .bp:hover { background: #0a4f3c; }
+  .bsec {
+    width: 100%; padding: 8px; background: transparent; color: var(--green-dark);
+    border: 1.5px solid var(--green-dark); border-radius: 9px; font-size: 12px;
+    font-weight: 500; cursor: pointer; margin-top: 4px; font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+  }
+  .bsec:hover { background: var(--green-light); }
+
+  .audit-ref {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 6px 10px;
+    font-size: 10px; color: var(--text3); margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* inputs */
+  input[type="text"], select, textarea {
+    width: 100%; border: 1px solid var(--border2); border-radius: 8px;
+    padding: 8px 10px; font-size: 12px; background: #fff; color: var(--text);
+    margin-bottom: 8px; font-family: 'DM Sans', sans-serif;
+    outline: none; transition: border-color 0.15s;
+  }
+  input[type="text"]:focus, select:focus, textarea:focus { border-color: var(--green-mid); }
+  textarea { resize: none; }
+
+  /* toggle */
+  .tgl { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .tsw {
+    width: 40px; height: 22px; background: #D0D9D6; border-radius: 11px;
+    cursor: pointer; position: relative; flex-shrink: 0; transition: background 0.2s;
+  }
+  .tsw.on { background: var(--green-mid); }
+  .tkn {
+    width: 16px; height: 16px; background: #fff; border-radius: 50%;
+    position: absolute; top: 3px; left: 3px;
+    transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .tsw.on .tkn { left: 21px; }
+
+  /* USSD */
+  .ussd-screen { background: #0a0a0a; min-height: 440px; padding: 14px; }
+  .ussd-bar { background: #111; padding: 7px 14px; font-family: 'DM Mono', monospace; font-size: 10px; color: #555; }
+  .ul { color: #00e676; font-size: 12px; font-family: 'DM Mono', monospace; line-height: 2; }
+  .ui { color: #fff; font-size: 12px; font-family: 'DM Mono', monospace; line-height: 2; }
+  .um { color: #444; font-size: 10px; font-family: 'DM Mono', monospace; }
+  .ussd-btn {
+    background: #00e676; color: #0a0a0a; border: none; padding: 6px 14px;
+    border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 11px;
+    cursor: pointer; margin-top: 14px; font-weight: 500;
+  }
+
+  /* SMS */
+  .smsb {
+    background: #111; border-radius: 8px; padding: 10px 12px;
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    color: #00e676; line-height: 1.9; margin-bottom: 8px;
+  }
+
+  /* success */
+  .success-icon { font-size: 32px; margin-bottom: 8px; }
+  .success-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .success-ref { font-size: 12px; color: var(--text3); font-family: 'DM Mono', monospace; margin-top: 3px; }
+
+  /* RIGHT PANEL */
+  .right-panel { display: flex; flex-direction: column; gap: 16px; }
+  .info-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px;
+  }
+  .ic-title { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .ic-body { font-size: 12px; color: var(--text2); line-height: 1.6; }
+  .ic-body strong { color: var(--green-dark); font-weight: 600; }
+  .flow-step {
+    display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start;
+  }
+  .flow-num {
+    width: 20px; height: 20px; border-radius: 50%; background: var(--green-dark);
+    color: #fff; font-size: 10px; font-weight: 600; display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+  }
+  .flow-text { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .flow-text strong { color: var(--text); font-weight: 500; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .pill {
+    padding: 3px 9px; border-radius: 99px; font-size: 10px; font-weight: 500;
+    background: var(--surface2); border: 1px solid var(--border); color: var(--text2);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--green-dark); color: rgba(255,255,255,0.4);
+    font-size: 11px; text-align: center; padding: 12px;
+  }
+  footer strong { color: rgba(255,255,255,0.7); }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-logo">
+    <div class="logo-mark">Uc</div>
+    <span class="logo-text">UbuzimaCard</span>
+    <span class="logo-sub">Platform Demo</span>
+  </div>
+  <div class="topnav-meta">Rwanda Ministry of Health · eHealth Unit</div>
+</nav>
+
+<div class="main">
+
+  <!-- LEFT: Role + Signal -->
+  <div class="left-panel">
+    <div>
+      <div class="panel-label">User role</div>
+      <div id="role-btns" style="display:flex;flex-direction:column;gap:5px;"></div>
+    </div>
+    <div class="divider"></div>
+    <div>
+      <div class="panel-label">Connectivity state</div>
+      <div class="conn-group" id="conn-btns"></div>
+    </div>
+    <div class="divider"></div>
+    <div>
+      <div class="panel-label">About this demo</div>
+      <p style="font-size:11px;color:var(--text2);line-height:1.6">
+        UbuzimaCard is a proposed interface layer on Rwanda's e-Ubuzima system. No data is held independently — all records belong to the Ministry of Health and flow through the Rwanda Health Information Exchange (RHIE).
+      </p>
+    </div>
+  </div>
+
+  <!-- CENTRE: Phone -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-notch"><div class="notch-pill"></div></div>
+      <div class="phone-status">
+        <span class="ps-time">09:41</span>
+        <span class="ps-sig" id="sig-txt">●●● Full signal</span>
+      </div>
+      <div class="phone-screen" id="pscr">
+        <div style="padding:1rem;font-size:13px;color:var(--text3)">Loading...</div>
+      </div>
+      <div class="phone-nav" id="pnav"></div>
+      <div class="phone-home-bar"><div class="home-indicator"></div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Context + Flow -->
+  <div class="right-panel" id="rpanel">
+    <div class="info-card">
+      <div class="ic-title" id="ctx-title">Select a role to begin</div>
+      <div class="ic-body" id="ctx-body">Choose a user role on the left and navigate through the screens inside the phone.</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <strong>UbuzimaCard</strong> — Concept-stage platform · Not for public distribution ·
+  All patient data shown is illustrative only · Kigali, Rwanda 2026
+</footer>
+
+<script>
+const S = { role:'patient', sc:0, conn:'full', looked:false, reported:false, visited:false, cs:[true,true,false] };
+
+const pt = {
+  name:'UWIMANA Marie', dob:'12/08/1985', sex:'F', blood:'B+',
+  nid:'1 1985 8 0000000 4 12',
+  alg:'Penicillin, Sulfa drugs', cond:'Type 2 Diabetes, Hypertension',
+  ins:'Mutuelle de Santé', insId:'MT-0123-KG-85', insSt:'Active',
+  ec:{ name:'Uwimana Jean', ph:'+250 788 456 123' }
+};
+
+const ROLES = [
+  { id:'patient', icon:'👤', lbl:'Patient / Citizen' },
+  { id:'fr',      icon:'🚑', lbl:'First Responder' },
+  { id:'chw',     icon:'🏘', lbl:'Community Health Worker' },
+  { id:'prov',    icon:'🏥', lbl:'Private Provider' }
+];
+
+const CONNS = [
+  { id:'full', lbl:'Full connectivity', cls:'active-full', sig:'●●● Full signal' },
+  { id:'low',  lbl:'Low / intermittent', cls:'active-low',  sig:'●○○ Weak signal' },
+  { id:'none', lbl:'No connectivity',    cls:'active-none', sig:'✕  Offline' }
+];
+
+const CTX = {
+  patient: {
+    0: { title:'Patient home screen', body:'The patient sees a summary of their emergency card, active consents, and sync status. Data is pulled from <strong>e-Ubuzima via RHIE</strong> — UbuzimaCard stores nothing independently.' },
+    1: { title:'Emergency health profile', body:'The full profile as stored in <strong>e-Ubuzima</strong>. Includes blood group, allergies, chronic conditions, Mutuelle de Santé insurance status, and emergency contact. This is what first responders see during a lookup.' },
+    2: { title:'Consent management', body:'The patient controls exactly who can access their data and under what scope. Every toggle generates an <strong>immutable audit log entry</strong>. Consent is revocable at any time, as required by Law No. 058/2021.' }
+  },
+  fr: {
+    full: {
+      0: { title:'Emergency lookup — live', body:'The primary lookup method is <strong>National ID (Indangamuntu)</strong>, using the existing RHIE–NIDA link. No physical object is needed from the patient. Phone number is the secondary fallback.' },
+      1: { title:'Emergency snapshot', body:'Results returned from <strong>e-Ubuzima via RHIE</strong>. Includes critical allergy alerts, chronic conditions, and <strong>Mutuelle de Santé / RSSB insurance status</strong> for immediate care and billing decisions. Every access generates an audit log entry.' }
+    },
+    low: {
+      0: { title:'Emergency lookup — cached', body:'On a weak signal, UbuzimaCard reads from the <strong>local cache</strong>. The sync queue continues transmitting in priority order when bandwidth allows. The responder is informed of cache age.' },
+      1: { title:'Cached emergency snapshot', body:'Profile returned from local cache. Data is still clinically actionable. The audit log entry is queued and pushed to <strong>e-Ubuzima</strong> once connectivity improves.' }
+    },
+    none: {
+      0: { title:'USSD fallback — no data needed', body:'When there is no data signal at all, first responders dial <strong>*800*UZA#</strong> on any GSM phone. The USSD channel queries the same RHIE backend and generates the same audit log entry as the app. Step through the flow using the button inside the phone.' },
+      1: { title:'USSD: ID entry', body:'The responder enters the 16-digit National ID. The system authenticates via the <strong>registered number whitelist</strong>. If the number is not registered, the session terminates immediately.' },
+      2: { title:'USSD: Emergency result', body:'The emergency snapshot is returned within seconds. Limited to 182 characters per screen — name, blood group, allergies, conditions, insurance status, emergency contact, and audit reference. Session closes automatically after display.' }
+    }
+  },
+  chw: {
+    full: {
+      0: { title:'CHW dashboard', body:'The CHW sees their assigned patients, report count, pending sync items, and any flagged alerts. Reports submitted here feed directly into the <strong>National Health Intelligence Center</strong> via RHIE.' },
+      1: { title:'Community health report', body:'Structured RCCE report form. Report type, severity, and free-text summary. On full connectivity, the report syncs to <strong>e-Ubuzima via RHIE</strong> immediately on submission.' },
+      2: { title:'Report confirmed', body:'Submission confirmed with a reference number. Report enters the <strong>NHIC data pipeline</strong> in real time — extending national health intelligence to the village level.' }
+    },
+    low: {
+      0: { title:'CHW dashboard — low signal', body:'On a weak signal, reports are queued locally and transmitted in <strong>priority order</strong> when bandwidth allows. Outbreak alerts transmit first; routine reports wait for a stronger window.' },
+      1: { title:'Community health report', body:'The form works identically offline. Data is written to the <strong>local sync queue</strong> with a timestamp and priority flag. The CHW is informed the report will sync when signal improves.' },
+      2: { title:'Report queued', body:'Report queued successfully. The sync queue will push it to <strong>e-Ubuzima via RHIE</strong> as soon as signal improves — no further action needed from the CHW.' }
+    },
+    none: {
+      0: { title:'SMS report mode — no data needed', body:'With no data signal, the CHW submits reports by <strong>SMS via RapidPro</strong> — the same infrastructure MOH already operates. Any basic GSM phone works. No smartphone or data connection required.' },
+      1: { title:'SMS report confirmed', body:'RapidPro routes the SMS into the same backend pipeline as the app. The CHW receives an acknowledgement SMS within 60 seconds. The report feeds the <strong>NHIC data pipeline</strong> once processed.' }
+    }
+  },
+  prov: {
+    0: { title:'Private provider lookup', body:'Providers can only access a patient record after <strong>patient consent</strong> has been granted. This gate is enforced at the RHIE level — not just in the UI. Data comes from e-Ubuzima.' },
+    1: { title:'Log clinical visit', body:'The provider logs chief complaint and diagnosis. Data is submitted to <strong>e-Ubuzima via RHIE</strong>, closing the public-private epidemiological data gap identified in HSSP V as a growing national risk.' },
+    2: { title:'Visit record synced', body:'The private sector visit is now part of the patient\'s national health record in <strong>e-Ubuzima</strong>. Audit logged. The epidemiological blind spot is closed for this patient encounter.' }
+  }
+};
+
+function setNav(items) {
+  document.getElementById('pnav').innerHTML = items.map((t,i) =>
+    `<button class="pnb${S.sc===i?' on':''}" onclick="goSc(${i})">${t}</button>`
+  ).join('');
+}
+
+function setCtx() {
+  let c;
+  if(S.role==='patient') c = CTX.patient[S.sc];
+  else if(S.role==='fr') c = CTX.fr[S.conn]?.[S.sc] || CTX.fr.full[0];
+  else if(S.role==='chw') c = CTX.chw[S.conn]?.[S.sc] || CTX.chw.full[0];
+  else c = CTX.prov[S.sc];
+  if(!c) return;
+  document.getElementById('ctx-title').textContent = c.title;
+  document.getElementById('ctx-body').innerHTML = c.body;
+}
+
+function setScr(html, nav) {
+  document.getElementById('pscr').innerHTML = html;
+  setNav(nav||[]);
+  setCtx();
+}
+
+// ── PATIENT ──
+function rPatient() {
+  const nav=['🏠 Home','👤 Profile','🔐 Consent'];
+  if(S.sc===0) {
+    setScr(`
+      <div class="ah"><div class="ah-t">UbuzimaCard</div><div class="ah-s">Muraho, Marie 👋</div></div>
+      <div class="sc">
+        <div class="card" style="border-left:3px solid var(--green-mid)">
+          <div class="card-title">Your emergency card</div>
+          <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px">${pt.name}</div>
+          <div style="font-size:12px;color:var(--text2)">Blood type: <strong>${pt.blood}</strong> &nbsp;·&nbsp; NID on file</div>
+          <div style="margin-top:8px;display:flex;gap:5px;flex-wrap:wrap">
+            <span class="bs">${pt.ins} ✓</span>
+            <span class="bw">⚠ Allergy: Penicillin</span>
+          </div>
+        </div>
+        <div class="sg">
+          <div class="sc2"><div class="sn">2</div><div class="sl">Active consents</div></div>
+          <div class="sc2"><div class="sn">3</div><div class="sl">Reports submitted</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Sync status</div>
+          <div class="info-row"><span class="il">Last sync with e-Ubuzima</span><span class="iv">Today, 08:12</span></div>
+          <div class="info-row"><span class="il">Status</span><span class="bs">Up to date</span></div>
+        </div>
+      </div>`, nav);
+  } else if(S.sc===1) {
+    setScr(`
+      <div class="ah-red">⚠ EMERGENCY HEALTH PROFILE</div>
+      <div class="ah2"><div class="ah-t">${pt.name}</div><div class="ah-s">DOB: ${pt.dob} &nbsp;·&nbsp; Sex: ${pt.sex}</div></div>
+      <div class="sc">
+        <div class="card">
+          <div class="info-row"><span class="il">Blood group</span><strong class="iv" style="color:var(--green-dark)">${pt.blood}</strong></div>
+          <div class="info-row"><span class="il">Allergies</span><strong style="color:var(--red-text)">${pt.alg}</strong></div>
+          <div class="info-row"><span class="il">Conditions</span><span class="iv">${pt.cond}</span></div>
+          <div class="info-row"><span class="il">National ID</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text2)">${pt.nid}</span></div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--green-mid)">
+          <div class="card-title">Health insurance</div>
+          <div class="info-row"><span class="il">Scheme</span><strong class="iv">${pt.ins}</strong></div>
+          <div class="info-row"><span class="il">Member ID</span><span style="font-family:'DM Mono',monospace;font-size:11px">${pt.insId}</span></div>
+          <div class="info-row"><span class="il">Coverage status</span><span class="bs">${pt.insSt}</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Emergency contact</div>
+          <div class="info-row"><span class="il">Name</span><span class="iv">${pt.ec.name}</span></div>
+          <div class="info-row"><span class="il">Phone</span><span style="color:var(--blue-text)">${pt.ec.ph}</span></div>
+        </div>
+        <div class="audit-ref">Source: e-Ubuzima via RHIE &nbsp;·&nbsp; Profile ID: PT-2026-44821</div>
+      </div>`, nav);
+  } else {
+    const lbls = ['First responders','Community health workers','Private providers'];
+    const descs = ['Emergency profile only','CHW summary view','Full clinical record'];
+    setScr(`
+      <div class="ah"><div class="ah-t">Consent Settings</div><div class="ah-s">Control who can see your data</div></div>
+      <div class="sc">
+        <p style="font-size:11px;color:var(--text2);margin-bottom:10px;line-height:1.5">All consent changes are logged with a timestamp. You can revoke access at any time.</p>
+        ${lbls.map((l,i)=>`
+        <div class="card">
+          <div class="tgl">
+            <div>
+              <div style="font-size:13px;font-weight:500;color:var(--text)">${l}</div>
+              <div style="font-size:11px;color:var(--text3)">${descs[i]}</div>
+            </div>
+            <div class="tsw${S.cs[i]?' on':''}" onclick="togC(${i})"><div class="tkn"></div></div>
+          </div>
+          ${S.cs[i]?`<div class="audit-ref" style="margin-top:8px">Granted &nbsp;·&nbsp; Logged to audit trail</div>`:''}
+        </div>`).join('')}
+      </div>`, nav);
+  }
+}
+
+// ── FIRST RESPONDER ──
+function rFR() {
+  if(S.conn==='none') {
+    const steps = [
+      `<div class="ul">UbuzimaCard Emergency Access</div>
+       <div class="ul">──────────────────────</div>
+       <div class="ul">1. Lookup by National ID</div>
+       <div class="ul">2. Lookup by Phone Number</div>
+       <div class="ul">0. Exit</div>`,
+      `<div class="ul">Enter 16-digit National ID:</div>
+       <div class="ui">1 1985 8 0000000 4 12<span style="animation:blink 1s infinite">_</span></div>`,
+      `<div class="ul">── EMERGENCY PROFILE ──────</div>
+       <div class="ul">UWIMANA Marie — F — 12/08/1985</div>
+       <div class="ul">Blood: B+</div>
+       <div class="ul" style="color:#ff5252">⚠ ALLERGY: Penicillin, Sulfa</div>
+       <div class="ul">Conditions: Diabetes, HBP</div>
+       <div class="ul" style="color:#69f0ae">Insurance: Mutuelle de Santé ✓</div>
+       <div class="ul" style="color:#69f0ae">Member: MT-0123-KG-85</div>
+       <div class="ul">EC: Jean +250788456123</div>
+       <div class="ul" style="color:#555">──────────────────────</div>
+       <div class="ul" style="color:#555">Ref: ACC-2026-4821</div>
+       <div class="ul" style="color:#555">Audit logged ✓ &nbsp; Session closed.</div>`
+    ];
+    const step = Math.min(S.sc, 2);
+    const snav = ['Step 1: Menu','Step 2: Enter ID','Step 3: Result'];
+    setScr(`
+      <div class="ussd-bar">*800*UZA# &nbsp;·&nbsp; USSD Emergency Lookup &nbsp;·&nbsp; Any GSM phone</div>
+      <div class="ussd-screen">
+        <div class="um" style="margin-bottom:12px">No data signal — USSD fallback active</div>
+        ${steps[step]}
+        ${step<2
+          ? `<button class="ussd-btn" onclick="nxtU()">▶ Next step</button>`
+          : `<div style="margin-top:14px;font-size:10px;color:#444;font-family:'DM Mono',monospace">Session ended. Redial *800*UZA# to start a new lookup.</div>`
+        }
+      </div>`, snav);
+    return;
+  }
+  const nav = ['🔍 Lookup','📋 Result'];
+  const lowWarn = S.conn==='low' ? `<div class="card" style="border-left:3px solid var(--amber-border)"><span class="bw">⚠ Weak signal</span><div style="font-size:11px;color:var(--text2);margin-top:4px">Showing cached profile. Last refresh: 2h ago. Clinically current.</div></div>` : '';
+  if(!S.looked || S.sc===0) {
+    setScr(`
+      <div class="ah"><div class="ah-t">Emergency Lookup</div><div class="ah-s">${S.conn==='low'?'Low signal — reading from cache':'Live RHIE lookup'}</div></div>
+      <div class="sc">
+        ${lowWarn}
+        <div class="card">
+          <div class="card-title">Lookup method</div>
+          <div style="display:flex;gap:5px;margin-bottom:10px">
+            <button style="flex:1;padding:7px;background:var(--green-dark);color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">National ID ✓</button>
+            <button style="flex:1;padding:7px;background:#fff;border:1px solid var(--border2);border-radius:8px;font-size:11px;cursor:pointer;color:var(--text2);font-family:'DM Sans',sans-serif">Phone No.</button>
+          </div>
+          <input type="text" placeholder="16-digit National ID" value="${pt.nid}" style="font-family:'DM Mono',monospace;font-size:11px">
+          <button class="bp" onclick="doLook()">Search patient record</button>
+        </div>
+        <p style="font-size:10px;color:var(--text3);text-align:center;margin-top:4px">All lookups logged with your provider ID, timestamp, and access method.</p>
+      </div>`, nav);
+  } else {
+    setScr(`
+      <div class="ah-red">⚠ EMERGENCY PROFILE — VERIFIED ACCESS</div>
+      <div class="ah2"><div class="ah-t">${pt.name}</div><div class="ah-s">DOB: ${pt.dob} &nbsp;·&nbsp; ${pt.sex} &nbsp;·&nbsp; Blood: ${pt.blood}</div></div>
+      <div class="sc">
+        <div class="card" style="border-left:3px solid var(--red-border)">
+          <div class="card-title">Critical alerts</div>
+          <div class="info-row"><span class="il">Allergies</span><strong style="color:var(--red-text)">${pt.alg}</strong></div>
+          <div class="info-row"><span class="il">Conditions</span><span class="iv">${pt.cond}</span></div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--green-mid)">
+          <div class="card-title">Insurance coverage</div>
+          <div class="info-row"><span class="il">${pt.ins}</span><span class="bs">${pt.insSt}</span></div>
+          <div class="info-row"><span class="il">Member ID</span><span style="font-family:'DM Mono',monospace;font-size:11px">${pt.insId}</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Emergency contact</div>
+          <div class="info-row"><span class="il">Name</span><span class="iv">${pt.ec.name}</span></div>
+          <div class="info-row"><span class="il">Phone</span><span style="color:var(--blue-text);font-weight:500">${pt.ec.ph}</span></div>
+        </div>
+        <div class="audit-ref">Access logged &nbsp;·&nbsp; Ref: ACC-2026-4821 &nbsp;·&nbsp; ${new Date().toLocaleTimeString()}</div>
+      </div>`, nav);
+  }
+}
+
+// ── CHW ──
+function rCHW() {
+  if(S.conn==='none') {
+    if(S.reported) {
+      setScr(`
+        <div class="ah"><div class="ah-t">SMS Report Sent</div><div class="ah-s">Via RapidPro · MOH Infrastructure</div></div>
+        <div class="sc">
+          <div class="card" style="border-left:3px solid var(--green-mid)">
+            <div class="card-title">Message sent</div>
+            <div class="smsb">REPORT MCH KG02 ANC_MISSED HIGH</div>
+            <div style="font-size:11px;color:var(--text2);margin-bottom:6px">System response received:</div>
+            <div class="smsb" style="color:#64dd17">Report received. Ref: CHW-2026-8821. Thank you.</div>
+          </div>
+          <p style="font-size:11px;color:var(--text2);line-height:1.5">Report routes via RapidPro into the RHIE pipeline and feeds the National Health Intelligence Center.</p>
+        </div>`, []);
+    } else {
+      setScr(`
+        <div class="ah"><div class="ah-t">SMS Report Mode</div><div class="ah-s">No data signal — SMS active</div></div>
+        <div class="sc">
+          <div class="card" style="border-left:3px solid var(--amber-border)"><span class="bw">No data connection</span><p style="font-size:11px;color:var(--text2);margin-top:5px">Submit reports by SMS. Any basic GSM phone works. No smartphone needed.</p></div>
+          <div class="card">
+            <div class="card-title">SMS format</div>
+            <div class="smsb">REPORT [type] [district] [event] [severity]</div>
+            <div style="font-size:11px;color:var(--text2);margin-bottom:6px">Example:</div>
+            <div class="smsb">REPORT MCH KG02 ANC_MISSED HIGH</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Compose report</div>
+            <input type="text" placeholder="REPORT MCH KG02 ANC_MISSED HIGH" style="font-family:'DM Mono',monospace;font-size:11px">
+            <button class="bp" onclick="sendSms()">Send via SMS</button>
+          </div>
+        </div>`, []);
+    }
+    return;
+  }
+  const nav=['📊 Dashboard','📝 Report','✓ Confirmed'];
+  if(S.sc===0) {
+    setScr(`
+      <div class="ah"><div class="ah-t">CHW Dashboard</div><div class="ah-s">Gasabo District · Remera Sector</div></div>
+      <div class="sc">
+        ${S.conn==='low'?`<div class="card" style="border-left:3px solid var(--amber-border)"><span class="bw">⚠ Weak signal</span><p style="font-size:11px;color:var(--text2);margin-top:4px">Reports will queue locally and sync when signal improves.</p></div>`:''}
+        <div class="sg">
+          <div class="sc2"><div class="sn">47</div><div class="sl">Patients assigned</div></div>
+          <div class="sc2"><div class="sn">12</div><div class="sl">Reports this month</div></div>
+          <div class="sc2"><div class="sn">3</div><div class="sl">Pending sync</div></div>
+          <div class="sc2"><div class="sn">1</div><div class="sl">Alert flagged</div></div>
+        </div>
+        <button class="bp" onclick="goSc(1)">+ Submit community report</button>
+      </div>`, nav);
+  } else if(S.sc===1) {
+    setScr(`
+      <div class="ah"><div class="ah-t">Submit Report</div><div class="ah-s">RCCE community report</div></div>
+      <div class="sc">
+        <div class="card">
+          <div class="card-title">Report type</div>
+          <select>
+            <option>Maternal health</option><option>Child health</option>
+            <option>Disease surveillance</option><option>Service quality feedback</option>
+            <option>Stock-out</option><option>Outbreak alert</option>
+          </select>
+          <div class="card-title">Summary</div>
+          <textarea rows="3" placeholder="Describe the health event or concern..."></textarea>
+          <div class="card-title">Severity</div>
+          <div style="display:flex;gap:4px;margin-bottom:10px">
+            ${['Low','Medium','High','Critical'].map(s=>`<button style="flex:1;padding:6px 2px;border:1px solid var(--border2);border-radius:7px;font-size:10px;cursor:pointer;background:#fff;color:var(--text2);font-family:'DM Sans',sans-serif">${s}</button>`).join('')}
+          </div>
+          <button class="bp" onclick="subRep()">Submit report</button>
+        </div>
+      </div>`, nav);
+  } else {
+    setScr(`
+      <div class="ah"><div class="ah-t">Report Confirmed</div><div class="ah-s">Queued for RHIE sync</div></div>
+      <div class="sc">
+        <div class="card" style="border-left:3px solid var(--green-mid);text-align:center;padding:20px 14px">
+          <div class="success-icon">✓</div>
+          <div class="success-title">Report received</div>
+          <div class="success-ref">Ref: CHW-2026-8821</div>
+        </div>
+        <div class="card">
+          <div class="info-row"><span class="il">Status</span><span class="${S.conn==='low'?'bw':'bs'}">${S.conn==='low'?'Queued — syncing soon':'Synced to e-Ubuzima'}</span></div>
+          <div class="info-row"><span class="il">Pipeline</span><span class="iv">RHIE → NHIC</span></div>
+          <div class="info-row"><span class="il">Submitted</span><span style="font-family:'DM Mono',monospace;font-size:11px">${new Date().toLocaleTimeString()}</span></div>
+        </div>
+        <p style="font-size:11px;color:var(--text2);line-height:1.5">This report feeds directly into the National Health Intelligence Center data pipeline — extending real-time national health intelligence to the village level.</p>
+      </div>`, nav);
+  }
+}
+
+// ── PRIVATE PROVIDER ──
+function rProv() {
+  const nav=['🔍 Lookup','📋 Log Visit','✓ Submitted'];
+  if(!S.visited && S.sc<1) {
+    setScr(`
+      <div class="ah"><div class="ah-t">Patient Lookup</div><div class="ah-s">Consent verification required</div></div>
+      <div class="sc">
+        <div class="card" style="border-left:3px solid var(--blue-text)"><span class="bi">Consent notice</span><p style="font-size:11px;color:var(--text2);margin-top:5px">You may only access a patient record if they have granted consent for private providers. This gate is enforced at the RHIE level.</p></div>
+        <div class="card">
+          <div class="card-title">Patient National ID</div>
+          <input type="text" placeholder="16-digit National ID" value="${pt.nid}" style="font-family:'DM Mono',monospace;font-size:11px">
+          <button class="bp" onclick="doLook()">Verify consent &amp; retrieve record</button>
+        </div>
+      </div>`, nav);
+  } else if(S.sc===1) {
+    setScr(`
+      <div class="ah"><div class="ah-t">Log Clinical Visit</div><div class="ah-s">${pt.name}</div></div>
+      <div class="sc">
+        <div class="card" style="border-left:3px solid var(--green-mid)">
+          <div class="info-row"><span class="il">Patient</span><strong class="iv">${pt.name}</strong></div>
+          <div class="info-row"><span class="il">Blood group</span><span class="iv">${pt.blood}</span></div>
+          <div class="info-row"><span class="il">Insurance</span><span class="bs">${pt.ins} ✓</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Chief complaint</div>
+          <textarea rows="2" placeholder="Patient's main presenting complaint..."></textarea>
+          <div class="card-title">Diagnosis (ICD-11 optional)</div>
+          <input type="text" placeholder="Diagnosis description">
+          <button class="bp" onclick="subVis()">Submit to e-Ubuzima via RHIE</button>
+          <p style="font-size:10px;color:var(--text3);text-align:center;margin-top:5px">Patient has consented to private provider access.</p>
+        </div>
+      </div>`, nav);
+  } else {
+    setScr(`
+      <div class="ah"><div class="ah-t">Visit Record Logged</div><div class="ah-s">Synced to national record</div></div>
+      <div class="sc">
+        <div class="card" style="border-left:3px solid var(--green-mid);text-align:center;padding:20px 14px">
+          <div class="success-icon">✓</div>
+          <div class="success-title">Visit record submitted</div>
+          <div class="success-ref">Ref: PRIV-2026-3341</div>
+        </div>
+        <div class="card">
+          <div class="info-row"><span class="il">Data destination</span><span class="iv">e-Ubuzima via RHIE</span></div>
+          <div class="info-row"><span class="il">Status</span><span class="bs">Synced</span></div>
+          <div class="info-row"><span class="il">Audit logged</span><span class="bs">Yes</span></div>
+        </div>
+        <p style="font-size:11px;color:var(--text2);line-height:1.5">This private clinic visit is now part of the patient's national health record in e-Ubuzima — closing the public-private epidemiological data gap identified in HSSP V.</p>
+      </div>`, nav);
+  }
+}
+
+// ── CONTROLS ──
+function render() {
+  document.getElementById('role-btns').innerHTML = ROLES.map(r =>
+    `<button class="role-btn${S.role===r.id?' active':''}" onclick="swR('${r.id}')">
+      <span class="role-icon">${r.icon}</span>${r.lbl}
+    </button>`).join('');
+  document.getElementById('conn-btns').innerHTML = CONNS.map(c =>
+    `<button class="conn-btn${S.conn===c.id?' '+c.cls:''}" onclick="swC('${c.id}')">
+      <span class="conn-dot${S.conn===c.id?'':' conn-dot-default'}"></span>${c.lbl}
+    </button>`).join('');
+  document.getElementById('sig-txt').textContent = CONNS.find(c=>c.id===S.conn).sig;
+  if(S.role==='patient') rPatient();
+  else if(S.role==='fr') rFR();
+  else if(S.role==='chw') rCHW();
+  else rProv();
+}
+
+function swR(r){S.role=r;S.sc=0;S.looked=false;S.reported=false;S.visited=false;render()}
+function swC(c){S.conn=c;S.sc=0;S.looked=false;S.reported=false;render()}
+function goSc(i){S.sc=i;render()}
+function togC(i){S.cs[i]=!S.cs[i];render()}
+function doLook(){S.looked=true;S.sc=1;render()}
+function subRep(){S.sc=2;S.reported=true;render()}
+function sendSms(){S.reported=true;render()}
+function subVis(){S.visited=true;S.sc=2;render()}
+function nxtU(){S.sc=Math.min(S.sc+1,2);render()}
+
+render();
+</script>
+</body>
+</html>

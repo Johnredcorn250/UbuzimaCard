@@ -380,11 +380,11 @@
 const S = { role:'patient', sc:0, conn:'full', looked:false, reported:false, visited:false, cs:[true,true,false] };
 
 const pt = {
-  name:'UWIMANA Marie', dob:'12/08/1985', sex:'F', blood:'B+',
-  nid:'1 1985 8 0000000 4 12',
+  name:'Cyusa Ryan', dob:'02/05/1985', sex:'M', blood:'B+',
+  nid:'1 2001 8 0000000 4 12',
   alg:'Penicillin, Sulfa drugs', cond:'Type 2 Diabetes, Hypertension',
   ins:'Mutuelle de Santé', insId:'MT-0123-KG-85', insSt:'Active',
-  ec:{ name:'Uwimana Jean', ph:'+250 788 456 123' }
+  ec:{ name:'Kabanda Yvonne', ph:'+250 788 000 000' }
 };
 
 const ROLES = [
@@ -579,13 +579,13 @@ function rFR() {
     const resultHTML = `<div class="ussd-overlay">
       <div class="ussd-body">
         <div class="ussd-text">
-          UWIMANA Marie, F, 12/08/1985<br>
+          Cyusa Ryan, M, 02/05/2001<br>
           Blood group: B+<br>
           Allergy: Penicillin, Sulfa drugs<br>
           Conditions: Diabetes, Hypertension<br>
           Insurance: Mutuelle de Sante - Active<br>
           Member ID: MT-0123-KG-85<br>
-          Emergency contact: Jean +250788456123<br>
+          Emergency contact: Yvonne K. +250788456123<br>
           Ref: ACC-2026-4821. Audit logged.
         </div>
       </div>
